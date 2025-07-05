@@ -5,7 +5,7 @@ const nextConfig = {
     // Custom webpack rules
     config.module.rules.push({
       test: /\.svg$/,
-      use: ['@svgr/webpack']
+      use: ['@svgr/webpack'],
     });
 
     // Add plugins
@@ -17,12 +17,12 @@ const nextConfig = {
 
     return config;
   },
-  
+
   // Build optimizations
   experimental: {
     optimizePackageImports: ['lodash'],
   },
-  
+
   // Bundle analyzer
   bundleAnalyzer: {
     enabled: process.env.ANALYZE === 'true',
