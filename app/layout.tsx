@@ -1,11 +1,7 @@
 import React from 'react';
 import './global';
 import './global.css';
-export default function RotLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RotLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
       <head>
@@ -15,12 +11,10 @@ export default function RotLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="stylesheet" href="/global.css" />
       </head>
-      
+
       <body>
-        <main>
-          {children}
-        </main>
+        <main>{children}</main>
       </body>
     </html>
-  )
+  );
 }
