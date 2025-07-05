@@ -1,9 +1,30 @@
 {
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "analyze": "ANALYZE=true pnpm build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
+    "lint:check": "eslint 'src/**/*.{ts,tsx}' --max-warnings 0",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,json,css,scss}'",
+    "format:check": "prettier --check './**/*.{js,jsx,ts,tsx,json,css,scss}'",
+    "style:lint": "stylelint 'src/**/*.{css,scss}'",
+    "style:fix": "stylelint 'src/**/*.{css,scss}' --fix",
+    "fix": "pnpm format && pnpm lint:fix && pnpm style:fix",
+    "prepare": "husky",
+    "lint:precommit": "eslint 'src/**/*.{ts,tsx}' --max-warnings 0",
+    "fmt:precommit": "prettier -l './**/*.{js,jsx,ts,tsx,json,css,scss}'"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-customizable"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": "pnpm run lint:precommit",
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss}": "pnpm run fmt:precommit"
   },
   "dependencies": {
     "next": "^15.3.5",
@@ -11,8 +32,25 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.30.1",
     "@types/node": "24.0.10",
     "@types/react": "19.1.8",
-    "typescript": "5.8.3"
+    "commitizen": "^4.3.1",
+    "commitlint-config-gitmoji": "^2.3.1",
+    "cz-customizable": "^7.4.0",
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "prettier": "3.6.2",
+    "stylelint": "^16.21.1",
+    "stylelint-config-standard": "^38.0.0",
+    "stylelint-config-standard-scss": "^15.0.1",
+    "typescript": "5.8.3",
+    "vite": "^7.0.2",
+    "vitest": "^3.2.4",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }
