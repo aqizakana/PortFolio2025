@@ -1,9 +1,0 @@
-node_modules/
-.next/
-.husky/
-dist/
-build/
-*.config.js
-public/
-coverage/
-.env*
