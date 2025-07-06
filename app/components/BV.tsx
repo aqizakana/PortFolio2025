@@ -75,21 +75,7 @@ const BV = () => {
 		};
 	}, []);
 
-	return (
-		<div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-			<div
-				ref={containerRef}
-				style={{
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					zIndex: 2,
-				}}
-			/>
-		</div>
-	);
+	return <div ref={containerRef} className="bv" />;
 };
 
 export default BV;
