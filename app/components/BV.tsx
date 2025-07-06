@@ -2,7 +2,8 @@
 
 import * as THREE from 'three';
 import './BV.css';
-import { Noise } from './Noise';
+import { Noise } from './Mesh/Noise';
+import { Sun } from './Mesh/Sun';
 import { useEffect, useRef } from 'react';
 
 const BV = () => {
@@ -43,12 +44,20 @@ const BV = () => {
 
 		const noise = new Noise();
 		const noiseMesh = noise.getMesh();
-		noiseMesh.position.x = 2; // Put noise behind other objects
+		noiseMesh.position.z = -10;
 		scene.add(noiseMesh);
+
+		const sun = new Sun();
+		const sunMesh = sun.getMesh();
+		sunMesh.position.y = 3;
+		sunMesh.position.z = -1;
+		scene.add(sunMesh);
+
 		const animate = () => {
 			requestAnimationFrame(animate);
 			renderer.render(scene, camera);
 			noise.animate();
+			sun.animate();
 		};
 		animate();
 
