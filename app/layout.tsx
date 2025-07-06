@@ -1,6 +1,7 @@
 import React from 'react';
 import './global';
 import './global.css';
+import Header from '@components/GlobalHeader';
 export default function RotLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
@@ -13,6 +14,7 @@ export default function RotLayout({ children }: { children: React.ReactNode }) {
       </head>
 
       <body>
+        <Header />
         <main>{children}</main>
       </body>
     </html>
