@@ -1,0 +1,9 @@
+.footer {
+	width: 100%;
+	height: auto;
+	position: fixed;
+	display: inline-block;
+	bottom: 0;
+	background-color: aliceblue;
+	z-index: 1000;
+}

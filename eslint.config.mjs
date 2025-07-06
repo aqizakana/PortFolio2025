@@ -24,6 +24,17 @@ export default [
           jsx: true,
         },
       },
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        HTMLCanvasElement: 'readonly',
+        requestAnimationFrame: 'readonly',
+        cancelAnimationFrame: 'readonly',
+        HTMLElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        Event: 'readonly',
+        console: 'readonly',
+      },
     },
     plugins: {
       '@typescript-eslint': tseslint,

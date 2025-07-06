@@ -1,0 +1,9 @@
+.header {
+	width: 100%;
+	height: auto;
+	position: fixed;
+	display: inline-block;
+	top: 0;
+	background-color: aliceblue;
+	z-index: 1000;
+}
