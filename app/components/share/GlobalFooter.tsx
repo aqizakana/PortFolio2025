@@ -2,7 +2,7 @@ import './GlobalFooter.css';
 const Footer = () => {
 	return (
 		<footer className="footer">
-			<span>UOTA</span>
+			<span className="copyright">UOTA</span>
 		</footer>
 	);
 };

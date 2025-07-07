@@ -4,6 +4,12 @@
 	position: fixed;
 	display: inline-block;
 	top: 0;
-	background-color: aliceblue;
+	background-color: rgb(12 122 231 / 20%);
 	z-index: 1000;
+	padding: 16px;
+}
+
+.name {
+	font-weight: 600;
+	font-size: 2rem;
 }
