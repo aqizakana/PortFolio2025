@@ -4,6 +4,8 @@ import * as THREE from 'three';
 import './BV.css';
 import { Noise } from './Mesh/Noise';
 import { Sun } from './Mesh/Sun';
+import { Building } from './Mesh/Building';
+import { Road } from './Mesh/Road';
 import { useEffect, useRef } from 'react';
 
 const BV = () => {
@@ -28,15 +30,21 @@ const BV = () => {
 			0.1,
 			1000
 		);
-		camera.position.z = 1;
+		camera.position.z = 100;
 		scene.add(camera);
+
+		const light = new THREE.DirectionalLight(0xffffff, 1.0);
+		scene.add(light);
+
+		const amb = new THREE.AmbientLight(0xffffff);
+		scene.add(amb);
 
 		// Create noise background
 
-		const geometry = new THREE.BoxGeometry(0.5, 1, 1); // サイズを縮小
-		camera.position.z = 3; // カメラをもっと後ろに
+		const geometry = new THREE.BoxGeometry(0.1, 0.5, 0.5); // サイズを縮小
+		camera.position.z = 5; // カメラをもっと後ろに
 
-		const material = new THREE.MeshBasicMaterial({ color: 0x6699ff });
+		const material = new THREE.MeshPhongMaterial({ color: 0x6699ff });
 		const mesh = new THREE.Mesh(geometry, material);
 		mesh.position.z = 0;
 		mesh.renderOrder = 1;
@@ -44,7 +52,7 @@ const BV = () => {
 
 		const noise = new Noise();
 		const noiseMesh = noise.getMesh();
-		noiseMesh.position.z = -10;
+		noiseMesh.position.z = -100;
 		scene.add(noiseMesh);
 
 		const sun = new Sun();
@@ -52,12 +60,36 @@ const BV = () => {
 		sunMesh.position.y = 3;
 		sunMesh.position.z = -1;
 		scene.add(sunMesh);
+		light.position.copy(sunMesh.position);
+
+		const buildings = [];
+		for (let i = 0; i < 3; i++) {
+			const building = new Building();
+			buildings.push(building);
+		}
+
+		buildings.forEach(build => {
+			const buildingMesh = build.getMesh();
+			const buildingPos = build.randomPos();
+			const buildingRad = build.randomRot();
+			buildingMesh.position.set(buildingPos.x, buildingPos.y, buildingPos.z);
+			buildingMesh.rotation.set(buildingRad.x, buildingRad.y, buildingRad.z);
+			scene.add(buildingMesh);
+		});
+
+		const road = new Road();
+		const roadMesh = road.getMesh();
+		const roadRad = road.rotation();
+		roadMesh.rotation.set(roadRad.x, roadRad.y, roadRad.z);
+		roadMesh.position.y = -2;
+		scene.add(roadMesh);
 
 		const animate = () => {
 			requestAnimationFrame(animate);
 			renderer.render(scene, camera);
 			noise.animate();
 			sun.animate();
+			buildings.forEach(building => building.animate());
 		};
 		animate();
 
@@ -71,6 +103,8 @@ const BV = () => {
 		return () => {
 			renderer.dispose();
 			noise.dispose();
+			sun.dispose();
+			buildings.forEach(building => building.dispose && building.dispose());
 			window.removeEventListener('resize', onResize);
 		};
 	}, []);
