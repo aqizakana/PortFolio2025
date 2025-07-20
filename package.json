@@ -1,4 +1,5 @@
 {
+	"name": "portfolio2025",
 	"scripts": {
 		"dev": "next dev",
 		"build": "next build",
@@ -14,7 +15,7 @@
 		"fix": "pnpm format && pnpm lint:fix && pnpm style:fix",
 		"commit": "pnpm exec cz",
 		"prepare": "husky",
-		"lint:precommit": "eslint './**/*.{ts,tsx}' --max-warnings 0",
+		"lint:precommit": "eslint 'app/**/*.{ts,tsx}' --max-warnings 0",
 		"fmt:precommit": "prettier -l './**/*.{js,jsx,ts,tsx,json,css,scss}'"
 	},
 	"config": {
@@ -30,6 +31,7 @@
 		"app/**/*.{js,jsx,ts,tsx,json,css,scss}": "pnpm run fmt:precommit"
 	},
 	"dependencies": {
+		"@vanilla-extract/css": "^1.17.4",
 		"next": "^15.3.5",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
@@ -44,6 +46,8 @@
 		"@types/three": "^0.178.0",
 		"@typescript-eslint/eslint-plugin": "^8.35.1",
 		"@typescript-eslint/parser": "^8.35.1",
+		"@vanilla-extract/next-plugin": "^2.4.14",
+		"@vanilla-extract/vite-plugin": "^5.1.0",
 		"commitizen": "^4.3.1",
 		"commitlint-config-gitmoji": "^2.3.1",
 		"cz-customizable": "^7.4.0",

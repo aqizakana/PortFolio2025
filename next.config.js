@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+const { createVanillaExtractPlugin } = require('@vanilla-extract/next-plugin');
+const withVanillaExtract = createVanillaExtractPlugin();
+
 const nextConfig = {
 	// Webpack customization
 	webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
@@ -23,10 +26,10 @@ const nextConfig = {
 		optimizePackageImports: ['lodash'],
 	},
 
-	// Bundle analyzer
-	bundleAnalyzer: {
-		enabled: process.env.ANALYZE === 'true',
+	// Environment variables for bundle analyzer
+	env: {
+		ANALYZE: process.env.ANALYZE,
 	},
 };
 
-module.exports = nextConfig;
+module.exports = withVanillaExtract(nextConfig);

@@ -1,10 +1,5 @@
-import BV from '@components/BV';
 const Index = () => {
-	return (
-		<>
-			<BV />
-		</>
-	);
+	return <></>;
 };
 
 export default Index;

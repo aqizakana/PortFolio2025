@@ -1,8 +1,8 @@
 import React from 'react';
 import Header from '@components/share/GlobalHeader';
 import Footer from '@components/share/GlobalFooter';
-import '@styles/global.css';
-
+import '@styles/global.css.ts';
+import BV from '@components/BV';
 export default function RotLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="ja">
@@ -15,7 +15,10 @@ export default function RotLayout({ children }: { children: React.ReactNode }) {
 
 			<body>
 				<Header />
-				<main>{children}</main>
+				<main>
+					<BV />
+					<div className="page-content">{children}</div>
+				</main>
 				<Footer />
 			</body>
 		</html>
