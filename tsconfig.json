@@ -15,7 +15,7 @@
 		"jsx": "preserve",
 		"baseUrl": ".",
 		"paths": {
-			"@component/*": ["app/components/*"],
+			"@components/*": ["app/components/*"],
 			"@scripts/*": ["app/scripts/*"],
 			"@styles/*": ["app/styles/*"]
 		},
