@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Mesh } from './Mesh';
 
-export class Building extends Mesh {
+export class Fall extends Mesh {
 	private velocity: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
 	private acceleration: THREE.Vector3 = new THREE.Vector3(0, -0.001, 0); // gravity
 	private groundLevel: number = -10;

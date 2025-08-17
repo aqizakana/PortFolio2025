@@ -12,7 +12,7 @@
 		"format:check": "prettier --check './**/*.{js,jsx,ts,tsx,json,css,scss}'",
 		"style:lint": "stylelint 'app/**/*.{css,scss}'",
 		"style:fix": "stylelint 'app/**/*.{css,scss}' --fix",
-		"fix": "pnpm format:check pnpm lint:fix && pnpm style:fix",
+		"fix": "pnpm format &&  pnpm lint:fix && pnpm style:fix",
 		"commit": "pnpm exec cz",
 		"prepare": "husky",
 		"lint:precommit": "eslint 'app/**/*.{ts,tsx}' --max-warnings 0",

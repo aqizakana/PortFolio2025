@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import './BV.css';
 import { Noise } from './Mesh/Noise';
 import { Sun } from './Mesh/Sun';
-import { Building } from './Mesh/Building';
+import { Fall } from './Mesh/fall';
 import { Road } from './Mesh/Road';
 import { useEffect, useRef } from 'react';
 
@@ -62,19 +62,19 @@ const BV = () => {
 		scene.add(sunMesh);
 		light.position.copy(sunMesh.position);
 
-		const buildings = [];
+		const falls = [];
 		for (let i = 0; i < 3; i++) {
-			const building = new Building();
-			buildings.push(building);
+			const fall = new Fall();
+			falls.push(fall);
 		}
 
-		buildings.forEach(build => {
-			const buildingMesh = build.getMesh();
-			const buildingPos = build.randomPos();
-			const buildingRad = build.randomRot();
-			buildingMesh.position.set(buildingPos.x, buildingPos.y, buildingPos.z);
-			buildingMesh.rotation.set(buildingRad.x, buildingRad.y, buildingRad.z);
-			scene.add(buildingMesh);
+		falls.forEach(fall => {
+			const fallMesh = fall.getMesh();
+			const fallPos = fall.randomPos();
+			const fallRad = fall.randomRot();
+			fallMesh.position.set(fallPos.x, fallPos.y, fallPos.z);
+			fallMesh.rotation.set(fallRad.x, fallRad.y, fallRad.z);
+			scene.add(fallMesh);
 		});
 
 		const road = new Road();
@@ -89,7 +89,7 @@ const BV = () => {
 			renderer.render(scene, camera);
 			noise.animate();
 			sun.animate();
-			buildings.forEach(building => building.animate());
+			falls.forEach(fall => fall.animate());
 		};
 		animate();
 
@@ -104,7 +104,7 @@ const BV = () => {
 			renderer.dispose();
 			noise.dispose();
 			sun.dispose();
-			buildings.forEach(building => building.dispose && building.dispose());
+			falls.forEach(fall => fall.dispose && fall.dispose());
 			window.removeEventListener('resize', onResize);
 		};
 	}, []);

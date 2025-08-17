@@ -3,11 +3,7 @@ import { Mesh } from './Mesh';
 
 export class Noise extends Mesh {
 	protected initGeometry(): void {
-		this.geometry = new THREE.PlaneGeometry(
-			window.innerWidth,
-			window.innerHeight,
-			32
-		);
+		this.geometry = new THREE.PlaneGeometry(window.innerWidth, 200, 32);
 	}
 
 	protected initMaterial(): void {
@@ -157,7 +153,7 @@ export class Noise extends Mesh {
           
           // ノイズの計算
           float noise = warp21(p * 10.0, g);
-          
+          float noiseValue = fbm21(p * 20.0 + vec2(u_time * 0.01, u_time * 0.01), 0.8);
           // グラデーションの計算（3つのタイプから選択可能）
           // 1. 円形グラデーション
           //float gradient = circularGradient(p, u_gradientCenter, u_gradientRadius, u_gradientSoftness);
@@ -167,7 +163,7 @@ export class Noise extends Mesh {
           
           // 3. 矩形グラデーション（コメントアウト）
           // float gradient = rectangularGradient(p, u_gradientCenter, vec2(u_gradientRadius), u_gradientSoftness * 0.5);
-          
+
           // ノイズとグラデーションの合成
           // 方法1: 乗算
           //vec3 color = vec3(noise * gradient);
@@ -176,7 +172,7 @@ export class Noise extends Mesh {
           // vec3 color = vec3(noise + gradient * 0.5);
           
           // 方法3: グラデーションで色を変える（コメントアウト）
-          vec3 color = mix(vec3(0.0, noise * 0.1, 0.2), vec3(noise, 0.0, 0.0), gradient);
+          vec3 color = mix(vec3(0.0, 0.1, noiseValue * 0.4), vec3(noiseValue * 0.9, noiseValue * 0.4, 0.0), vUv.y);
           
           fragColor = vec4(color, 1.0);
         }
