@@ -30,6 +30,7 @@
 		"app/**/*.{js,jsx,ts,tsx,json,css,scss}": "pnpm run fmt:precommit"
 	},
 	"dependencies": {
+		"gsap": "^3.13.0",
 		"next": "^15.3.5",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
