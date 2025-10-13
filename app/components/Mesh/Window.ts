@@ -2,6 +2,12 @@ import * as THREE from 'three';
 import { Mesh } from './Mesh';
 
 export class Window extends Mesh {
+	protected fragmentShader: string;
+	constructor(importFragmentShader?: string) {
+		super();
+		this.fragmentShader = importFragmentShader || '';
+	}
+
 	protected initGeometry(): void {
 		this.geometry = new THREE.PlaneGeometry(4, 2);
 	}
@@ -29,7 +35,9 @@ export class Window extends Mesh {
           gl_Position = projectionMatrix * viewMatrix * worldPosition;
         }
       `,
-			fragmentShader: `
+			fragmentShader:
+				this.fragmentShader ||
+				`
         in vec2 vUv;
         in vec3 vWorldPosition;
         uniform float u_time;
@@ -42,7 +50,7 @@ export class Window extends Mesh {
           float cameraDistance = length(u_cameraPos - vWorldPosition);
           
           // 距離に基づく透明度制御
-          float opacity = smoothstep(5.0, 8.0, cameraDistance);
+          float opacity = smoothstep(.0, 2.0, cameraDistance);
           opacity = clamp(opacity, 0.0, 0.8);
           
           fragColor = vec4(0.8, 0.9, 1.0, opacity);
@@ -52,9 +60,11 @@ export class Window extends Mesh {
 		});
 	}
 
-	animate(cameraPos: THREE.Vector3): void {
+	animate(cameraPos?: THREE.Vector3): void {
 		this.material.uniforms.u_time.value += 0.1;
-		this.material.uniforms.u_cameraPos.value.copy(cameraPos);
+		if (cameraPos) {
+			this.material.uniforms.u_cameraPos.value.copy(cameraPos);
+		}
 
 		// このMeshのワールド座標を更新
 		this.mesh.getWorldPosition(this.material.uniforms.u_meshWorldPos.value);

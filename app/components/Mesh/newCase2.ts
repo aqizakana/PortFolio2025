@@ -1,11 +1,20 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
+import { Img } from './img';
 import { Mesh } from './Mesh';
-
+import { Text } from './Text';
 export class newCase2 extends Mesh {
 	protected controls!: OrbitControls;
+	protected img: Img;
+	protected text: Text;
 	protected mouse = mousePos;
+
+	constructor(imgPath?: string, text?: string) {
+		super();
+		this.img = new Img(imgPath);
+		this.text = new Text(text);
+	}
 
 	private quantumState = {
 		superPosition: 0.5,

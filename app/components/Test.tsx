@@ -71,7 +71,7 @@ const DisplayTest = () => {
 		//scene.add(pyramid.getMesh());
 
 		displaysRef.current = displays;
-		//scene.add(group);
+		scene.add(group);
 
 		const adaptiveCrystal = new AdaptiveCrystalCase();
 		adaptiveCrystal.getMesh().position.set(-5, 0, 0);

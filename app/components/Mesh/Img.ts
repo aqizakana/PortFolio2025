@@ -1,4 +1,3 @@
-import { assert } from 'console';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Mesh } from './Mesh';
@@ -71,8 +70,7 @@ export class Img extends Mesh {
 			this.material.uniforms.u_texture.value = texture;
 			this.material.uniforms.u_opacity.value = 1.0;
 			this.isLoaded = true;
-		} catch (error) {
-			assert(false, `Failed to load texture: ${error}, ${this.imgSrc}`);
+		} catch {
 			return;
 		}
 	}
