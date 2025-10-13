@@ -8,19 +8,19 @@ interface CDItem {
 const List: CDItem[] = [
 	{
 		imgSrc: '/example.png',
-		title: 'CDジャケット',
+		title: '文字としての月',
 		description: 'CDジャケットの3Dモデルです。',
 		path: '/',
 	},
 	{
 		imgSrc: '/example2.png',
-		title: 'CDジャケット',
+		title: '科学者になりたい！',
 		description: 'CDジャケットの3Dモデルです。',
 		path: '/',
 	},
 	{
 		imgSrc: '/example3.png',
-		title: 'CDジャケット',
+		title: 'Share',
 		description: 'CDジャケットの3Dモデルです。',
 		path: '/',
 	},

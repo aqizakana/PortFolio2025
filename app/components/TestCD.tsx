@@ -1,10 +1,10 @@
 'use client';
 import * as THREE from 'three';
 import './Test.css';
-import { Display } from './Mesh/Display';
+import { Case } from './Mesh/case';
 import { useEffect, useRef } from 'react';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Shelf } from './Mesh/Shelf';
+import { Shelf } from './Mesh/shelf';
 import { List } from './lib/CDlist';
 import { gsap } from 'gsap';
 import { type MouseEvent } from 'react';
@@ -14,7 +14,7 @@ const CDTest = () => {
 	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 	const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
 	const controlsRef = useRef<OrbitControls | null>(null);
-	const displayRef = useRef<Display | null>(null);
+	const displayRef = useRef<Case | null>(null);
 	const shelfRef = useRef<Shelf | null>(null);
 	const raycasterRef = useRef<THREE.Raycaster>(new THREE.Raycaster());
 	const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());

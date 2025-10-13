@@ -34,6 +34,9 @@ const Footer = () => {
 			<Link className="link" href="">
 				SoundCloud
 			</Link>
+			<Link className="link" href="/test/">
+				Test
+			</Link>
 		</footer>
 	);
 };

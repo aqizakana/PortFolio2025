@@ -2,8 +2,8 @@
 
 import * as THREE from 'three';
 import './BV.css';
-import { Noise } from './Mesh/Noise';
-import { Sun } from './Mesh/Sun';
+import { Noise } from './Mesh/noise';
+import { Sun } from './Mesh/sun';
 import { useEffect, useRef } from 'react';
 
 const BV = () => {
