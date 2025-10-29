@@ -24,8 +24,8 @@ export class PyramidCase extends Mesh {
 	}
 
 	private positionAdjust(): void {
-		this.img.getMesh().position.set(-1, 0, 0);
-		this.text.getMesh().position.set(1, 0, 0);
+		this.img.getMesh().position.set(0, -1, 0);
+		this.text.getMesh().position.set(0, 0, 0);
 	}
 
 	private wireGeometry!: THREE.BufferGeometry;

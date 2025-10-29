@@ -161,7 +161,7 @@ export class ZaraCase extends Mesh {
           float interference = sin(vPhase * 10.0) * 0.5 + 0.5;
           
           vec3 color = vColor * interference;
-          float alpha = (1.0 - dist * 2.0) * u_coherence;
+          float alpha = (1.0 - dist * 2.0) * 0.5;
           
           fragColor = vec4(color, alpha);
         }
@@ -277,7 +277,7 @@ export class ZaraCase extends Mesh {
           float quantumOscillation = sin(u_phase + position.x * 5.0) * 
                                     cos(u_phase + position.y * 5.0) * 
                                     sin(u_phase + position.z * 5.0);
-          quantumPos += normal * quantumOscillation * 0.02 * u_superposition;
+          //quantumPos += normal * quantumOscillation * 0.02 * u_superposition;
           
           vec4 worldPosition = modelMatrix * vec4(quantumPos, 1.0);
           vPosition = worldPosition.xyz;
@@ -369,7 +369,7 @@ export class ZaraCase extends Mesh {
           color = mix(color, vec3(noise), decoherence * 0.2);
           
           // 観測による変化
-          if (u_collapsed > 0.5) {
+          if (u_collapsed > 0.8) {
             color = mix(color, vec3(1.0), 0.3);
           }
           

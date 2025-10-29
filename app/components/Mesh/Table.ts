@@ -7,7 +7,7 @@ export class Table extends Mesh {
 	protected controls!: OrbitControls;
 	protected mouse = mousePos;
 	protected initGeometry(): void {
-		const geometry = new THREE.BoxGeometry(2, 0.1, 1);
+		const geometry = new THREE.BoxGeometry(3.6, 0.01, 2);
 		this.geometry = geometry;
 	}
 
@@ -33,7 +33,6 @@ export class Table extends Mesh {
         }
       `,
 			fragmentShader: `
-
         in vec2 vUv;
         in vec3 vPosition;
         in vec3 vNormal;
@@ -43,18 +42,17 @@ export class Table extends Mesh {
 
         out vec4 fragColor;
         void main() {
-
-          vec3 baseColor = vec3(0.8, 0.7, 0.6);
-          vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+          vec3 baseColor = vec3(1.0);
+          vec3 lightDir = normalize(vec3(0.4, 0.6, 0.1));
           float diff = max(dot(vNormal, lightDir), 0.0);
           vec3 diffuse = diff * baseColor;
           
           vec3 viewDir = normalize(vViewDirection);
           vec3 reflectDir = reflect(-lightDir, vNormal);
           float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
-          vec3 specular = spec * vec3(1.0);
+          vec3 specular = spec * vec3(0.1);
           vec3 color = diffuse + specular;
-          fragColor = vec4(vec3(1.0,0.0, 0.0), 1.0);
+          fragColor = vec4(color, 1.0);
         }
       `,
 			side: THREE.DoubleSide,

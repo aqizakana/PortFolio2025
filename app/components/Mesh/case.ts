@@ -17,7 +17,7 @@ export class Case extends Mesh {
 		const newFaces = [];
 
 		// BoxGeometry has 12 triangles (6 faces * 2 triangles each)
-		// Front face triangles are at indices 8-13 (triangles 4-5)
+		// Front face triangles are at indices 8-13(triangles 4-5)
 		for (let i = 0; i < faces.length; i += 3) {
 			const triangleIndex = Math.floor(i / 3);
 			if (triangleIndex !== 8 && triangleIndex !== 9) {
@@ -76,8 +76,8 @@ export class Case extends Mesh {
 
           // Dynamic grid pattern based on UV and time
           vec2 grid = fract(vUv * 10.0 + vec2(u_time * 0.1, u_time * 0.1));
-          float gridPattern = smoothstep(0.02, 0.05, min(grid.x, grid.y)) * 
-          smoothstep(0.02, 0.05, min(1.0 - grid.x, 1.0 - grid.y));
+          float gridPattern = smoothstep(0.02, 0.05, grid.x) *
+          smoothstep(0.02, 0.05, 1.0 - grid.x);
           color *= gridPattern;
 
           float mouseDist = length(vPosition.xy - (u_mouse * vec2(2.0, 2.0)));
@@ -87,8 +87,7 @@ export class Case extends Mesh {
           //color += vec3(mouseLight) * 0.5;
           
           // Add some subtle animation
-          color += sin(vPosition.x * 5.0 + u_time) * 0.1;
-          color += cos(vPosition.y * 5.0 + u_time) * 0.1;
+          // color += cos(vPosition.y * 5.0 + u_time) * 0.1;
           fragColor = vec4(color, 1.0);
         }
       `,

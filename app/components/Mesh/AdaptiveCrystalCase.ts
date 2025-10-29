@@ -719,9 +719,6 @@ export class AdaptiveCrystalCase extends Mesh {
 			line.rotation.z += 0.001 * (index + 1);
 		});
 
-		// 全体の回転（ゆっくりと）
-		this.mesh.rotation.y += 0.002;
-
 		// カメラ距離に応じた詳細度の調整
 		if (cameraPos) {
 			const distance = cameraPos.distanceTo(this.mesh.position);

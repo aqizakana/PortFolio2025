@@ -28,7 +28,6 @@ const DisplayTest = () => {
 			| newCase2
 			| PyramidCase
 			| CaseClaude
-			| ZaraCase
 			| AdaptiveCrystalCase
 			| NormalDisplay
 		)[]
@@ -93,19 +92,17 @@ const DisplayTest = () => {
 				newCase2,
 				PyramidCase,
 				CaseClaude,
-				ZaraCase,
 				AdaptiveCrystalCase,
 			];
 			const variations: (
+				| NormalDisplay
 				| Display
 				| Display2
 				| newCase
 				| newCase2
 				| PyramidCase
 				| CaseClaude
-				| ZaraCase
 				| AdaptiveCrystalCase
-				| NormalDisplay
 			)[] = [];
 
 			// displayClassesのすべての要素を使用するようにループ

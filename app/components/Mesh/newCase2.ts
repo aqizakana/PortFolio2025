@@ -262,6 +262,7 @@ export class newCase2 extends Mesh {
         out vec3 vPosition;
         out vec3 vNormal;
         out vec3 vViewDirection;
+        out vec3 vQuantumPos;
         uniform float u_time;
         uniform float u_superposition;
         uniform float u_phase;
@@ -274,9 +275,9 @@ export class newCase2 extends Mesh {
           float quantumOscillation = sin(u_phase + position.x * 5.0) * 
                                     cos(u_phase + position.y * 5.0) * 
                                     sin(u_phase + position.z * 5.0);
-          quantumPos += normal * quantumOscillation * 0.02 * u_superposition;
-          
-          vec4 worldPosition = modelMatrix * vec4(quantumPos, 1.0);
+          quantumPos += normal * quantumOscillation * 10.0 * u_superposition;
+          vQuantumPos = quantumPos;
+          vec4 worldPosition = modelMatrix * vec4(quantumPos,  1.0);
           vPosition = worldPosition.xyz;
           vNormal = normalize(normalMatrix * normal);
           vViewDirection = normalize(cameraPosition - worldPosition.xyz);
@@ -288,6 +289,7 @@ export class newCase2 extends Mesh {
         in vec3 vPosition;
         in vec3 vNormal;
         in vec3 vViewDirection;
+        in vec3 vQuantumPos;
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform float u_superposition;
@@ -353,7 +355,7 @@ export class newCase2 extends Mesh {
           float probability = probabilityCloud(vPosition);
           
           // 最終色の合成
-          vec3 color = baseColor;
+          vec3 color = baseColor * vQuantumPos;
           color = mix(color, interferenceColor, 0.3);
           color += entanglementColor * 0.3;
           color += tunnelColor * 0.2;
