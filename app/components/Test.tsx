@@ -6,7 +6,7 @@ import { List } from './lib/CDlist';
 import { AdaptiveCrystalCase } from './Mesh/AdaptiveCrystalCase';
 import { ZaraCase } from './Mesh/caseLikeZara';
 import { CaseClaude } from './Mesh/CaseWithClaude';
-import { Display } from './Mesh/display';
+import { Display } from './Mesh/Display';
 import { Display2 } from './Mesh/display2';
 import { newCase } from './Mesh/newCase';
 import { newCase2 } from './Mesh/newCase2';

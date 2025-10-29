@@ -6,8 +6,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './BV.css';
 import { Ground } from './Mesh/City/ground';
-import { Display } from './Mesh/display';
-import { Noise } from './Mesh/noise';
+import { Display } from './Mesh/Display';
+import { Noise } from './Mesh/Noise';
 import { Sun } from './Mesh/sun';
 import { List } from './lib/CDlist';
 
