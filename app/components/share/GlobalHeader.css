@@ -2,7 +2,6 @@
 	width: 50px;
 	height: 100%;
 	position: fixed;
-	display: inline-flex;
 	justify-content: flex-start;
 	align-items: center;
 	gap: 50px;
@@ -11,6 +10,7 @@
 	z-index: 1000;
 	padding: 16px;
 	writing-mode: vertical-rl;
+	display: none;
 }
 
 .name {

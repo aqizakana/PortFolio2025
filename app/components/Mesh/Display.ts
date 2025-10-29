@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Case } from './case';
-import { Img } from './img';
+import { Img } from './Img';
 import { Text } from './Text';
 import { Window } from './Window';
 

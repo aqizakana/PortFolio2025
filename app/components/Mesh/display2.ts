@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { ZaraCase } from './caseLikeZara';
-import { Img } from './img';
+import { Img } from './Img';
 import { Table } from './Table';
 import { Text } from './Text';
 import { Window } from './Window';

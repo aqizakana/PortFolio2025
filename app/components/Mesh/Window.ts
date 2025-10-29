@@ -50,7 +50,7 @@ export class Window extends Mesh {
           float cameraDistance = length(u_cameraPos - vWorldPosition);
           
           // 距離に基づく透明度制御
-          float opacity = smoothstep(.0, 2.0, cameraDistance);
+          float opacity = smoothstep(.0, 10.0, cameraDistance);
           opacity = clamp(opacity, 0.0, 0.8);
           
           fragColor = vec4(0.8, 0.9, 1.0, opacity);

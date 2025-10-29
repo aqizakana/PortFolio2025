@@ -1,13 +1,12 @@
 'use client';
-import * as THREE from 'three';
-import './Test.css';
-import { Case } from './Mesh/case';
-import { useEffect, useRef } from 'react';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Shelf } from './Mesh/shelf';
-import { List } from './lib/CDlist';
 import { gsap } from 'gsap';
-import { type MouseEvent } from 'react';
+import { useEffect, useRef, type MouseEvent } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Shelf } from './Mesh/Shelf';
+import { Case } from './Mesh/case';
+import './Test.css';
+import { List } from './lib/CDlist';
 const CDTest = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const sceneRef = useRef<THREE.Scene | null>(null);

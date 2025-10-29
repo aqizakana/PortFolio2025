@@ -3,7 +3,7 @@ import { Mesh } from './Mesh';
 
 export class Noise extends Mesh {
 	protected initGeometry(): void {
-		this.geometry = new THREE.PlaneGeometry(
+		this.geometry = new THREE.BoxGeometry(
 			window.innerWidth,
 			window.innerHeight,
 			32
@@ -137,6 +137,7 @@ export class Noise extends Mesh {
       `,
 			transparent: true,
 			depthWrite: false,
+			side: THREE.BackSide,
 		});
 	}
 

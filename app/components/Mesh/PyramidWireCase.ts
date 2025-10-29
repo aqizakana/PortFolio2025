@@ -1,10 +1,32 @@
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { mousePos } from '../lib/MousePos';
+import { Img } from './Img';
 import { Mesh } from './Mesh';
+import { Text } from './Text';
 
 export class PyramidCase extends Mesh {
 	protected mouse = mousePos;
+	protected img: Img;
+	protected text: Text;
+
+	constructor(imgPath?: string, text?: string) {
+		super();
+		this.img = new Img(imgPath);
+		this.text = new Text(text);
+		this.buildMesh();
+		this.positionAdjust();
+	}
+
+	private buildMesh(): void {
+		this.mesh.add(this.img.getMesh());
+		this.mesh.add(this.text.getMesh());
+	}
+
+	private positionAdjust(): void {
+		this.img.getMesh().position.set(-1, 0, 0);
+		this.text.getMesh().position.set(1, 0, 0);
+	}
 
 	private wireGeometry!: THREE.BufferGeometry;
 	private wireMaterial!: THREE.ShaderMaterial;

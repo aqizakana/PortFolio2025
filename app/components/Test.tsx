@@ -10,6 +10,7 @@ import { Display } from './Mesh/display';
 import { Display2 } from './Mesh/display2';
 import { newCase } from './Mesh/newCase';
 import { newCase2 } from './Mesh/newCase2';
+import { NormalDisplay } from './Mesh/normal';
 import { PyramidCase } from './Mesh/PyramidWireCase';
 import './Test.css';
 
@@ -19,7 +20,19 @@ const DisplayTest = () => {
 	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
 	const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
 	const controlsRef = useRef<OrbitControls | null>(null);
-	const displaysRef = useRef<Display[]>([]);
+	const displaysRef = useRef<
+		(
+			| Display
+			| Display2
+			| newCase
+			| newCase2
+			| PyramidCase
+			| CaseClaude
+			| ZaraCase
+			| AdaptiveCrystalCase
+			| NormalDisplay
+		)[]
+	>([]);
 
 	useEffect(() => {
 		if (!canvasRef.current) return;
@@ -45,7 +58,11 @@ const DisplayTest = () => {
 			0.1,
 			1000
 		);
-		camera.position.z = 3;
+		camera.position.z = 5; // Position camera looking front (along z-axis)
+		camera.position.x = 0;
+		camera.position.y = 0;
+
+		camera.lookAt(new THREE.Vector3(0, 0, 0)); // Look at center of scene
 		cameraRef.current = camera;
 		const light = new THREE.AmbientLight(0xffffff, 0.5);
 		scene.add(light);
@@ -55,65 +72,72 @@ const DisplayTest = () => {
 
 		const list = List;
 		const group = new THREE.Group();
-		const displays: Display[] = [];
+		const displays: (
+			| Display
+			| Display2
+			| newCase
+			| newCase2
+			| PyramidCase
+			| CaseClaude
+			| ZaraCase
+			| AdaptiveCrystalCase
+			| NormalDisplay
+		)[] = [];
 
-		list.forEach((item, index) => {
-			const display = new Display(item.imgSrc, item.title);
+		const displaysVariation = (items: typeof List) => {
+			const displayClasses = [
+				NormalDisplay,
+				Display,
+				Display2,
+				newCase,
+				newCase2,
+				PyramidCase,
+				CaseClaude,
+				ZaraCase,
+				AdaptiveCrystalCase,
+			];
+			const variations: (
+				| Display
+				| Display2
+				| newCase
+				| newCase2
+				| PyramidCase
+				| CaseClaude
+				| ZaraCase
+				| AdaptiveCrystalCase
+				| NormalDisplay
+			)[] = [];
+
+			// displayClassesのすべての要素を使用するようにループ
+			displayClasses.forEach((DisplayClass, i) => {
+				// itemsを循環的に使用（items数が少ない場合は繰り返し使用）
+				const item = items[i % items.length];
+				variations.push(new DisplayClass(item.imgSrc, item.title));
+			});
+
+			return variations;
+		};
+
+		const variations = displaysVariation(list);
+
+		variations.forEach((display, index) => {
 			group.add(display.getMesh());
 			displays.push(display);
 
 			// Position displays in a grid or line
-			display.getMesh().position.x = index * 5; // Spread them out horizontally
+			display.getMesh().position.x = index * 7; // Spread them out horizontally
 		});
-
-		const pyramid = new PyramidCase();
-		pyramid.getMesh().position.set(2, 0, 2);
-		//scene.add(pyramid.getMesh());
 
 		displaysRef.current = displays;
 		scene.add(group);
-
-		const adaptiveCrystal = new AdaptiveCrystalCase();
-		adaptiveCrystal.getMesh().position.set(-5, 0, 0);
-		//scene.add(adaptiveCrystal.getMesh());
-
-		const display2 = new Display2();
-		display2.getMesh().position.set(0, 2.2, 0);
-		//scene.add(display2.getMesh());
-
-		const claudeCase = new CaseClaude();
-		claudeCase.getMesh().position.set(0, -2, 0);
-		//scene.add(claudeCase.getMesh());
-
-		const case2 = new newCase();
-		case2.getMesh().position.set(0, 0, 0);
-		//scene.add(case2.getMesh());
-
-		const zara = new ZaraCase();
-		zara.getMesh().position.set(0, 0, 0);
-		//scene.add(zara.getMesh());
-
-		const newcase2 = new newCase2();
-		newcase2.getMesh().position.set(0, 0, 0);
-		scene.add(newcase2.getMesh());
 
 		const animate = () => {
 			requestAnimationFrame(animate);
 			controls.update();
 
-			// Animate all displays
 			displaysRef.current.forEach(display => {
 				display.animate(camera.position);
 			});
-
-			pyramid.animate(camera.position);
-			adaptiveCrystal.animate(camera.position);
-			claudeCase.animate();
-			case2.animate();
-
-			display2.animate(camera.position);
-			//zara.animate(camera.position);
-			newcase2.animate();
 			renderer.render(scene, camera);
 		};
 		animate();

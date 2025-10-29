@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
-import { Img } from './img';
+import { Img } from './Img';
 import { Mesh } from './Mesh';
 import { Text } from './Text';
 export class newCase2 extends Mesh {
@@ -14,6 +14,19 @@ export class newCase2 extends Mesh {
 		super();
 		this.img = new Img(imgPath);
 		this.text = new Text(text);
+		this.buildMesh();
+		this.positionAdjust();
+	}
+
+	private buildMesh(): void {
+		// Add all components to the group once during initialization
+		this.mesh.add(this.img.getMesh());
+		this.mesh.add(this.text.getMesh());
+	}
+
+	private positionAdjust(): void {
+		this.img.getMesh().position.set(-1, 0, 0);
+		this.text.getMesh().position.set(1, 0, 0);
 	}
 
 	private quantumState = {

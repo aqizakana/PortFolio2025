@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry';
 import { mousePos } from '../lib/MousePos';
+import { Img } from './Img';
 import { Mesh } from './Mesh';
+import { Text } from './Text';
 
 export class AdaptiveCrystalCase extends Mesh {
 	protected mouse = mousePos;
@@ -12,6 +14,27 @@ export class AdaptiveCrystalCase extends Mesh {
 	private morphTransition = 0;
 	private energyField!: THREE.Mesh;
 	private fractureLines: THREE.LineSegments[] = [];
+
+	protected img: Img;
+	protected text: Text;
+
+	constructor(imgPath?: string, text?: string) {
+		super();
+		this.img = new Img(imgPath);
+		this.text = new Text(text);
+		this.buildMesh();
+		this.positionAdjust();
+	}
+
+	private buildMesh(): void {
+		this.mesh.add(this.img.getMesh());
+		this.mesh.add(this.text.getMesh());
+	}
+
+	private positionAdjust(): void {
+		this.img.getMesh().position.set(-1, 0, 0);
+		this.text.getMesh().position.set(1, 0, 0);
+	}
 
 	protected initGeometry(): void {
 		// 基本形状：不規則な多面体（ボロノイ分割風）
