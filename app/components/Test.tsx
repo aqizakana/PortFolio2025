@@ -4,7 +4,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { List } from './lib/CDlist';
 import { AdaptiveCrystalCase } from './Mesh/adaptiveCrystalCase';
-import { ZaraCase } from './Mesh/caseLikeZara';
 import { CaseClaude } from './Mesh/caseWithClaude';
 import { Display } from './Mesh/display';
 import { Display2 } from './Mesh/display2';
@@ -78,7 +77,6 @@ const DisplayTest = () => {
 			| newCase2
 			| PyramidCase
 			| CaseClaude
-			| ZaraCase
 			| AdaptiveCrystalCase
 			| NormalDisplay
 		)[] = [];
