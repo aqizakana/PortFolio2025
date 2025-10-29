@@ -17,7 +17,8 @@
 		"paths": {
 			"@components/*": ["app/components/*"],
 			"@scripts/*": ["app/scripts/*"],
-			"@styles/*": ["app/styles/*"]
+			"@styles/*": ["app/styles/*"],
+			"@mesh/*": ["app/components/Mesh/*"]
 		},
 		"plugins": [
 			{

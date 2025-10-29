@@ -1,8 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import './GlobalHeader.css';
 import { useState, useEffect } from 'react';
-
 const Footer = () => {
 	const [scrollRate, setScrollRate] = useState(0);
 
@@ -22,9 +22,21 @@ const Footer = () => {
 
 	return (
 		<footer className="header">
-			<span className="name" id="name" style={{ opacity: scrollRate }}>
+			<span className="name" id="name" style={{ opacity: 0.3 + scrollRate }}>
 				UOTA
 			</span>
+			<Link className="link" href="/about/">
+				About
+			</Link>
+			<Link className="link" href="/lineup/">
+				Lineup
+			</Link>
+			<Link className="link" href="">
+				SoundCloud
+			</Link>
+			<Link className="link" href="/test/">
+				Test
+			</Link>
 		</footer>
 	);
 };

@@ -1,47 +1,63 @@
 'use client';
 
-import * as THREE from 'three';
-import './BV.css';
-import { Noise } from './Mesh/Noise';
-import { Sun } from './Mesh/Sun';
+import { Building } from '@mesh/City/building';
 import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import './BV.css';
+import { Ground } from './Mesh/City/ground';
+import { Display } from './Mesh/display';
+import { Noise } from './Mesh/noise';
+import { Sun } from './Mesh/sun';
+import { List } from './lib/CDlist';
 
 const BV = () => {
-	const containerRef = useRef<HTMLDivElement>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const sceneRef = useRef<THREE.Scene | null>(null);
+	const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+	const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+	const controlsRef = useRef<OrbitControls | null>(null);
+	const displaysRef = useRef<Display[]>([]);
 
 	useEffect(() => {
 		// Get canvas by ID instead of ref
-		if (!containerRef.current) return;
+		if (!canvasRef.current) return;
 
 		const scene = new THREE.Scene();
+		sceneRef.current = scene;
 		const renderer = new THREE.WebGLRenderer({
+			canvas: canvasRef.current,
 			antialias: true,
 			alpha: true,
 		});
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderer.setPixelRatio(window.devicePixelRatio);
-		containerRef.current.appendChild(renderer.domElement);
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.type = THREE.PCFSoftShadowMap; // ソフトな影
+		rendererRef.current = renderer;
 
 		const camera = new THREE.PerspectiveCamera(
 			100,
 			window.innerWidth / window.innerHeight,
 			0.1,
-			1000
+			100
 		);
 		camera.position.z = 1;
+		cameraRef.current = camera;
 		scene.add(camera);
 
-		// Create noise background
+		const light = new THREE.DirectionalLight(0xffffff, 1);
+		light.position.set(5, 10, 5);
+		light.castShadow = true; // ←影を落とす
+		light.shadow.mapSize.width = 2048;
+		light.shadow.mapSize.height = 2048;
+		scene.add(light);
 
-		const geometry = new THREE.BoxGeometry(0.5, 1, 1); // サイズを縮小
 		camera.position.z = 3; // カメラをもっと後ろに
 
-		const material = new THREE.MeshBasicMaterial({ color: 0x6699ff });
-		const mesh = new THREE.Mesh(geometry, material);
-		mesh.position.z = 0;
-		mesh.renderOrder = 1;
-		scene.add(mesh);
-
+		const building = new Building();
+		building.getMesh().position.set(-5, 0, 0);
+		scene.add(building.getMesh());
 		const noise = new Noise();
 		const noiseMesh = noise.getMesh();
 		noiseMesh.position.z = -10;
@@ -53,11 +69,47 @@ const BV = () => {
 		sunMesh.position.z = -1;
 		scene.add(sunMesh);
 
+		const list = List;
+		const group = new THREE.Group();
+		const displays: Display[] = [];
+
+		list.forEach((item, index) => {
+			const display = new Display(item.imgSrc, item.title);
+			group.add(display.getMesh());
+			displays.push(display);
+
+			// Position displays in a grid or line
+			display.getMesh().position.x = index % 2 == 0 ? index * 5 : -index * 10; // Spread them out horizontally
+			display.getMesh().position.z = -index * 3;
+			display.getMesh().rotation.y =
+				index % 2 == 0 ? -Math.sin(index) * 2 : Math.sin(index) * 2; // Alternate rotation direction
+		});
+
+		displaysRef.current = displays;
+		scene.add(group);
+
+		const ground = new Ground();
+		scene.add(ground.getMesh());
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controlsRef.current = controls;
+		controls.enableDamping = true;
+		controls.dampingFactor = 0.05;
+		controls.enableZoom = true;
+		controls.enableRotate = true;
+		controls.enablePan = true;
+
 		const animate = () => {
 			requestAnimationFrame(animate);
-			renderer.render(scene, camera);
+			controls.update();
+			ground.animate();
 			noise.animate();
 			sun.animate();
+			building.animate();
+			displaysRef.current.forEach(display => {
+				display.animate(camera.position);
+			});
+			renderer.render(scene, camera);
 		};
 		animate();
 
@@ -72,10 +124,16 @@ const BV = () => {
 			renderer.dispose();
 			noise.dispose();
 			window.removeEventListener('resize', onResize);
+			controlsRef.current?.dispose();
+			// Dispose all displays
+			displaysRef.current.forEach(display => {
+				display.dispose();
+			});
+			displaysRef.current = [];
 		};
 	}, []);
 
-	return <div ref={containerRef} className="bv" />;
+	return <canvas ref={canvasRef} className="bv" />;
 };
 
 export default BV;
