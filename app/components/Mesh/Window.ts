@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 
 export class Window extends Mesh {
 	protected fragmentShader: string;

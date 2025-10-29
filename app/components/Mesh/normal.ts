@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import { Img } from './Img';
-import { Mesh } from './Mesh';
-import { Text } from './Text';
-import { Window } from './Window';
+import { Img } from './img';
+import { Mesh } from './mesh';
+import { Text } from './text';
+import { Window } from './window';
 export class NormalDisplay extends Mesh {
 	protected img: Img;
 	protected text: Text;

@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { Case } from './case';
-import { Img } from './Img';
-import { Text } from './Text';
-import { Window } from './Window';
+import { Img } from './img';
+import { Text } from './text';
+import { Window } from './window';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
