@@ -8,7 +8,7 @@ import './BV.css';
 import { Ground } from './Mesh/City/ground';
 import { Display } from './Mesh/Display';
 import { Noise } from './Mesh/Noise';
-import { Sun } from './Mesh/sun';
+import { Sun } from './Mesh/Sun';
 import { List } from './lib/CDlist';
 
 const BV = () => {
