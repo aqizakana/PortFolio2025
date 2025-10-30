@@ -1,17 +1,18 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { Case } from './case';
+import { Cover } from './cover';
 import { Img } from './img';
 import { Text } from './text';
 import { Window } from './window';
-
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 
 export class Display {
 	private img: Img;
 	private text: Text;
 	private window: Window;
 	private case: Case;
+	private cover: Cover;
 
 	protected controls!: OrbitControls;
 	constructor(imgPath?: string, text?: string) {
@@ -19,8 +20,10 @@ export class Display {
 		this.text = new Text(text);
 		this.window = new Window();
 		this.case = new Case();
+		this.cover = new Cover();
 		this.buildMesh();
 		this.positionAdjust();
+		this.updateMesh();
 	}
 
 	protected mesh: THREE.Group = new THREE.Group();
@@ -31,6 +34,7 @@ export class Display {
 		this.mesh.add(this.text.getMesh());
 		this.mesh.add(this.window.getMesh());
 		this.mesh.add(this.case.getMesh());
+		this.mesh.add(this.cover.getMesh());
 	}
 
 	public getMesh(): THREE.Group {
@@ -41,6 +45,7 @@ export class Display {
 		this.img.getMesh().position.set(-1, 0, 0);
 		this.text.getMesh().position.set(1, 0, 0);
 		this.window.getMesh().position.set(0, 0, 1);
+		this.case.getMesh().position.set(0, 0, 0);
 	}
 
 	private updateMesh(): void {
@@ -60,6 +65,7 @@ export class Display {
 		this.text.animate();
 		this.case.animate();
 		this.window.animate(cameraPos);
+		this.cover.animate();
 	}
 
 	public dispose(): void {
@@ -67,5 +73,6 @@ export class Display {
 		this.text.dispose();
 		this.window.dispose();
 		this.case.dispose();
+		this.cover.dispose();
 	}
 }

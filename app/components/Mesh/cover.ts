@@ -1,23 +1,20 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
 import { Mesh } from './mesh';
-
-export class Case extends Mesh {
-	protected controls!: OrbitControls;
+export class Cover extends Mesh {
 	protected mouse = mousePos;
+	constructor() {
+		super();
+		this.initGeometry();
+		this.initMaterial();
+		this.initMesh();
+	}
+
 	protected initGeometry(): void {
-		const geometry = new THREE.BoxGeometry(4, 2, 2);
-
-		const window = new THREE.PlaneGeometry(10, 2);
-		window.translate(0, 0, 1);
-
-		// Remove the front face (indices 4-5 in the faces array)
-		const faces = geometry.index!.array;
+		const geometry = new THREE.BoxGeometry(4.2, 2.5, 2.2);
 		const newFaces = [];
 
-		// BoxGeometry has 12 triangles (6 faces * 2 triangles each)
-		// Front face triangles are at indices 8-13(triangles 4-5)
+		const faces = geometry.index!.array;
 		for (let i = 0; i < faces.length; i += 3) {
 			const triangleIndex = Math.floor(i / 3);
 			if (triangleIndex !== 8 && triangleIndex !== 9) {
@@ -35,7 +32,7 @@ export class Case extends Mesh {
 			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
-				u_mouse: { value: this.mouse },
+				u_mouse: { value: new THREE.Vector2() },
 			},
 			vertexShader: `
         out vec2 vUv;
@@ -84,9 +81,9 @@ export class Case extends Mesh {
           // Dynamic grid pattern based on UV and time
           vec2 grid;
           if (abs(facing) < 0.5) {
-          grid = fract(vUv * 10.0 + vec2(u_time * 0.1, u_time * 0.1));}
+          grid = fract(vUv * 10.0 - vec2(u_time * 0.1, u_time * 0.1));}
           else {
-          grid = abs(fract(vUv * 10.0 - vec2(u_time * 0.1, u_time * 0.1)));
+          grid = abs(fract(vUv * 10.0 + vec2(u_time * 0.1, u_time * 0.1)));
           }
           float gridPattern = smoothstep(0.02, 0.05, grid.x) *
           smoothstep(0.02, 0.05, 1.0 - grid.x);
@@ -101,8 +98,10 @@ export class Case extends Mesh {
 			transparent: true,
 		});
 	}
+
 	public animate(): void {
 		this.material.uniforms.u_time.value += 0.05;
+		// valueがTHREE.Vector2型なのでlerpが使える
 		this.material.uniforms.u_mouse.value = mousePos;
 		return;
 	}

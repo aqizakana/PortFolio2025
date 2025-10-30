@@ -51,6 +51,12 @@ export class NormalDisplay extends Mesh {
 	protected initMaterial(): void {
 		this.material = new THREE.ShaderMaterial({
 			glslVersion: THREE.GLSL3,
+			uniforms: {
+				u_resolution: {
+					value: new THREE.Vector2(window.innerWidth, window.innerHeight),
+				},
+				u_time: { value: 0.0 },
+			},
 			vertexShader: `
         out vec2 vUv;
         out vec3 vPosition;
@@ -80,24 +86,36 @@ export class NormalDisplay extends Mesh {
         out vec4 fragColor;
 
         void main() {
+
+				// Fresnel-like effect based on viewing angle
+          // フレネル効果は、光が異なる屈折率を持つ二つの媒質の境界面に入射する際に起こる反射と屈折の現象。
+          float fresnelPower = 10.0; // 調整可能なパラメータ
+          float fresnelBias = 0.01;  // 最小反射率
+          float fresnelScale = 1.0; // スケール
+          float NdotV = max(0.0, dot(vNormal, vViewDirection));
+          float fresnel = fresnelBias + fresnelScale * pow(1.0 - NdotV, fresnelPower);
+					
           vec2 st = vUv;
-            vec3 color = vec3(0.5, 0.1, vViewDirection.z);
+					float facing = dot(vNormal, vViewDirection);
+					float coordColor = step(0.2, fract(st.x * u_resolution.x) * fract(st.y * u_resolution.y));
+					vec3 color;
+          if (facing > 0.2) {
+            color = vec3( vViewDirection.x, vViewDirection.y, 0.8);
+          } else {
+            color = vec3(coordColor, vViewDirection.z, 0.8);
+          }
 
           fragColor = vec4(color, 1.0);
         }
       `,
-			uniforms: {
-				u_resolution: {
-					value: new THREE.Vector2(window.innerWidth, window.innerHeight),
-				},
-				u_time: { value: 0.0 },
-			},
 			side: THREE.DoubleSide,
 			transparent: true,
 		});
 	}
 
-	public animate(): void {}
+	public animate(): void {
+		this.material.uniforms.u_time.value += 0.05;
+	}
 
 	public dispose(): void {
 		this.img.dispose();

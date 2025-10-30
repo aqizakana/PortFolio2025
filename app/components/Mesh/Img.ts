@@ -16,7 +16,7 @@ export class Img extends Mesh {
 	}
 
 	protected initGeometry(): void {
-		const geometry = new THREE.PlaneGeometry(1, 1, 2);
+		const geometry = new THREE.BoxGeometry(1, 1, 0.1);
 		this.geometry = geometry;
 	}
 
