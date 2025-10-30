@@ -3,10 +3,10 @@ import { gsap } from 'gsap';
 import { useEffect, useRef, type MouseEvent } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Shelf } from './Mesh/Shelf';
-import { Case } from './Mesh/case';
 import './Test.css';
 import { List } from './lib/CDlist';
+import { Shelf } from './mesh/Shelf';
+import { Case } from './mesh/case';
 const CDTest = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const sceneRef = useRef<THREE.Scene | null>(null);

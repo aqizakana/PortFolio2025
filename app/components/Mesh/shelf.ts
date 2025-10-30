@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { type CDItem } from '../lib/CDlist';
-import { CD } from './cd';
+import { CD } from './CD';
 
 export class Shelf {
 	protected cds: CD[] = [];

@@ -8,8 +8,8 @@ import './BV.css';
 import { List } from './lib/CDlist';
 import { Ground } from './Mesh/City/ground';
 import { Display } from './Mesh/display';
-import { Noise } from './Mesh/Noise';
-import { Sun } from './Mesh/Sun';
+import { Noise } from './Mesh/noise';
+import { Sun } from './Mesh/sun';
 
 const BV = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
