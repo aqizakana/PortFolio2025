@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { List } from './lib/CDlist';
-import { AdaptiveCrystalCase } from './mesh/AdaptiveCrystalCase';
+import { AdaptiveCrystalCase } from './mesh/adaptiveCrystalCase';
 import { ZaraCase } from './mesh/caseLikeZara';
 import { CaseClaude } from './mesh/caseWithClaude';
 import { Display } from './mesh/display';
