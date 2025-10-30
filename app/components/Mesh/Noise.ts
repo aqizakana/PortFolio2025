@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Mesh } from './mesh';
+import { Mesh } from './Mesh';
 
 export class Noise extends Mesh {
 	protected initGeometry(): void {

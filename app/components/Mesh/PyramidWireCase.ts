@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { mousePos } from '../lib/MousePos';
-import { Img } from './img';
-import { Mesh } from './mesh';
-import { Text } from './text';
+import { Img } from './Img';
+import { Mesh } from './Mesh';
+import { Text } from './Text';
 
 export class PyramidCase extends Mesh {
 	protected mouse = mousePos;
@@ -24,8 +24,8 @@ export class PyramidCase extends Mesh {
 	}
 
 	private positionAdjust(): void {
-		this.img.getMesh().position.set(0, -1, 0);
-		this.text.getMesh().position.set(0, 0, 0);
+		this.img.getMesh().position.set(-1, 0, 0);
+		this.text.getMesh().position.set(1, 0, 0);
 	}
 
 	private wireGeometry!: THREE.BufferGeometry;
@@ -122,19 +122,18 @@ export class PyramidCase extends Mesh {
 	protected initMaterial(): void {
 		// メインの三角錐用マテリアル
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 				u_mouse: { value: this.mouse },
 				u_cameraPos: { value: new THREE.Vector3() },
 			},
 			vertexShader: `
-        out vec2 vUv;
-        out vec3 vPosition;
-        out vec3 vNormal;
-        out vec3 vViewDirection;
-        out vec3 vWorldPosition;
-
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
+        varying vec3 vWorldPosition;
+        
         uniform float u_time;
         
         void main() {
@@ -155,17 +154,16 @@ export class PyramidCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        in vec2 vUv;
-        in vec3 vPosition;
-        in vec3 vNormal;
-        in vec3 vViewDirection;
-        in vec3 vWorldPosition;
-
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
+        varying vec3 vWorldPosition;
+        
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform vec3 u_cameraPos;
         
-        out vec4 fragColor;
         // ホログラフィック効果用のノイズ関数
         float hash(vec2 p) {
           return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
@@ -243,7 +241,7 @@ export class PyramidCase extends Mesh {
           float alpha = 0.8 + fresnel * 0.1 + hex * 0.1;
           alpha = clamp(alpha, 0.0, 0.95);
           
-          fragColor = vec4(color, alpha);
+          gl_FragColor = vec4(color, alpha);
         }
       `,
 			side: THREE.DoubleSide,
@@ -254,17 +252,16 @@ export class PyramidCase extends Mesh {
 
 		// ワイヤー用マテリアル
 		this.wireMaterial = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
 				u_energy: { value: 0.0 },
 			},
 			vertexShader: `
-        out vec3 vPosition;
-        out vec2 vUv;
-        out float vDistanceAlongCurve;
-
+        varying vec3 vPosition;
+        varying vec2 vUv;
+        varying float vDistanceAlongCurve;
+        
         uniform float u_time;
         uniform float u_energy;
         
@@ -282,15 +279,13 @@ export class PyramidCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        in vec3 vPosition;
-        in vec2 vUv;
-        in float vDistanceAlongCurve;
-
+        varying vec3 vPosition;
+        varying vec2 vUv;
+        varying float vDistanceAlongCurve;
+        
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform float u_energy;
-
-        out vec4 fragColor;
         
         void main() {
           // エネルギーフローのアニメーション
@@ -323,7 +318,7 @@ export class PyramidCase extends Mesh {
           // グロー効果のための透明度
           float alpha = 0.8 + flow * 0.2;
           
-          fragColor = vec4(color, alpha);
+          gl_FragColor = vec4(color, alpha);
         }
       `,
 			transparent: true,
@@ -360,5 +355,8 @@ export class PyramidCase extends Mesh {
 				Math.sin(this.material.uniforms.u_time.value * 0.5) * 0.5 + 0.5;
 			this.wireMaterial.uniforms.u_energy.value = energyPulse;
 		}
+
+		// メッシュ全体の回転（オプション）
+		this.mesh.rotation.y += 0.003;
 	}
 }

@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
-import { Img } from './img';
-import { Mesh } from './mesh';
-import { Text } from './text';
+import { Img } from './Img';
+import { Mesh } from './Mesh';
+import { Text } from './Text';
 export class newCase2 extends Mesh {
 	protected controls!: OrbitControls;
 	protected img: Img;
@@ -246,7 +246,6 @@ export class newCase2 extends Mesh {
 	}
 	protected initMaterial(): void {
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
@@ -258,11 +257,10 @@ export class newCase2 extends Mesh {
 				u_phase: { value: 0.0 },
 			},
 			vertexShader: `
-        out vec2 vUv;
-        out vec3 vPosition;
-        out vec3 vNormal;
-        out vec3 vViewDirection;
-        out vec3 vQuantumPos;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
         uniform float u_time;
         uniform float u_superposition;
         uniform float u_phase;
@@ -275,9 +273,9 @@ export class newCase2 extends Mesh {
           float quantumOscillation = sin(u_phase + position.x * 5.0) * 
                                     cos(u_phase + position.y * 5.0) * 
                                     sin(u_phase + position.z * 5.0);
-          quantumPos += normal * quantumOscillation * 10.0 * u_superposition;
-          vQuantumPos = quantumPos;
-          vec4 worldPosition = modelMatrix * vec4(quantumPos,  1.0);
+          quantumPos += normal * quantumOscillation * 0.02 * u_superposition;
+          
+          vec4 worldPosition = modelMatrix * vec4(quantumPos, 1.0);
           vPosition = worldPosition.xyz;
           vNormal = normalize(normalMatrix * normal);
           vViewDirection = normalize(cameraPosition - worldPosition.xyz);
@@ -285,11 +283,10 @@ export class newCase2 extends Mesh {
         }
       `,
 			fragmentShader: `
-        in vec2 vUv;
-        in vec3 vPosition;
-        in vec3 vNormal;
-        in vec3 vViewDirection;
-        in vec3 vQuantumPos;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform float u_superposition;
@@ -298,8 +295,6 @@ export class newCase2 extends Mesh {
         uniform float u_tunneling;
         uniform float u_coherence;
         uniform float u_phase;
-
-        out vec4 fragColor;
         
         // 量子的な干渉パターン
         float quantumInterference(vec3 p) {
@@ -355,7 +350,7 @@ export class newCase2 extends Mesh {
           float probability = probabilityCloud(vPosition);
           
           // 最終色の合成
-          vec3 color = baseColor * vQuantumPos;
+          vec3 color = baseColor;
           color = mix(color, interferenceColor, 0.3);
           color += entanglementColor * 0.3;
           color += tunnelColor * 0.2;
@@ -373,7 +368,7 @@ export class newCase2 extends Mesh {
           }
           
           float alpha = 0.8 + fresnel * 0.2;
-          fragColor = vec4(color, alpha);
+          gl_FragColor = vec4(color, alpha);
         }
       `,
 			side: THREE.DoubleSide,

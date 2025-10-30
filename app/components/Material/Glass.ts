@@ -13,9 +13,9 @@ export class GlassMaterial extends THREE.ShaderMaterial {
 		} = {}
 	) {
 		const vertexShader = `
-      out vec3 vWorldPosition;
-      out vec3 vWorldNormal;
-      out vec3 vViewDirection;
+      varying vec3 vWorldPosition;
+      varying vec3 vWorldNormal;
+      varying vec3 vViewDirection;
 
       void main() {
         vec4 worldPosition = modelMatrix * vec4(position, 1.0);
@@ -36,11 +36,9 @@ export class GlassMaterial extends THREE.ShaderMaterial {
       uniform float fresnelPower;
       uniform float time;
 
-      in vec3 vWorldPosition;
-      in vec3 vWorldNormal;
-      in vec3 vViewDirection;
-
-      out vec4 fragColor;
+      varying vec3 vWorldPosition;
+      varying vec3 vWorldNormal;
+      varying vec3 vViewDirection;
 
       // より正確なフレネル計算
       float fresnel(vec3 viewDirection, vec3 normal, float n1, float n2) {
@@ -109,12 +107,11 @@ export class GlassMaterial extends THREE.ShaderMaterial {
         // ガラスの色調を適用（より自然に）
         finalColor = mix(finalColor, glassColor, 0.5);
         
-        fragColor = vec4(finalColor, opacity);
+        gl_FragColor = vec4(finalColor, opacity);
       }
     `;
 
 		super({
-			glslVersion: THREE.GLSL3,
 			vertexShader,
 			fragmentShader,
 			uniforms: {

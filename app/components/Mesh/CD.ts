@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { type CDItem } from '../lib/CDlist';
-import { Mesh } from './mesh';
+import { Mesh } from './Mesh';
 
 export class CD extends Mesh {
 	protected item: CDItem;
@@ -30,21 +30,19 @@ export class CD extends Mesh {
 		const texture = textureLoader.load(imgSrc);
 
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_texture: { value: texture },
 			},
 			vertexShader: `
-        out vec2 vUv;
+        varying vec2 vUv;
         void main() {
           vUv = uv;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
 			fragmentShader: `
-        in vec2 vUv;
+        varying vec2 vUv;
         uniform sampler2D u_texture;
-				out vec4 fragColor;
         void main() {
           vec2 centeredUv = vUv - 0.5;
           vec2 scaledUv = centeredUv * 1.0 + 0.5;
@@ -54,7 +52,7 @@ export class CD extends Mesh {
           }
 
           vec4 textureColor = texture2D(u_texture, scaledUv);
-          fragColor = textureColor;
+          gl_FragColor = textureColor;
         }
       `,
 		});

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Mesh } from './mesh';
+import { Mesh } from './Mesh';
 
 export class Img extends Mesh {
 	protected controls!: OrbitControls;
@@ -16,31 +16,28 @@ export class Img extends Mesh {
 	}
 
 	protected initGeometry(): void {
-		const geometry = new THREE.BoxGeometry(1, 1, 0.1);
+		const geometry = new THREE.PlaneGeometry(1, 1, 2);
 		this.geometry = geometry;
 	}
 
 	protected initMaterial(): void {
 		// Create initial transparent material
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_texture: { value: new THREE.Texture() },
 				u_opacity: { value: 0.0 },
 			},
 			vertexShader: `
-					out vec2 vUv;
+					varying vec2 vUv;
 					void main() {
 							vUv = uv;
 							gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 					}
 			`,
 			fragmentShader: `
-				in vec2 vUv;
+				varying vec2 vUv;
 				uniform sampler2D u_texture;
 				uniform float u_opacity;
-
-				out vec4 fragColor;
 				void main() {
 						// Center the UV coordinates
 						vec2 centeredUv = vUv - 0.5;
@@ -54,7 +51,7 @@ export class Img extends Mesh {
 						}
 						
 						vec4 textureColor = texture2D(u_texture, scaledUv);
-						fragColor = vec4(textureColor.rgb, textureColor.a * u_opacity);
+						gl_FragColor = vec4(textureColor.rgb, textureColor.a * u_opacity);
 				}
 			`,
 			transparent: true,

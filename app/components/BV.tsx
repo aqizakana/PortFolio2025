@@ -5,11 +5,11 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './BV.css';
-import { List } from './lib/CDlist';
 import { Ground } from './Mesh/City/ground';
-import { Display } from './Mesh/display';
-import { Noise } from './Mesh/noise';
-import { Sun } from './Mesh/sun';
+import { Display } from './Mesh/Display';
+import { Noise } from './Mesh/Noise';
+import { Sun } from './Mesh/Sun';
+import { List } from './lib/CDlist';
 
 const BV = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -20,6 +20,7 @@ const BV = () => {
 	const displaysRef = useRef<Display[]>([]);
 
 	useEffect(() => {
+		// Get canvas by ID instead of ref
 		if (!canvasRef.current) return;
 
 		const scene = new THREE.Scene();

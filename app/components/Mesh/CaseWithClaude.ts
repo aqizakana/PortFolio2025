@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
-import { Img } from './img';
-import { Mesh } from './mesh';
-import { Text } from './text';
+import { Img } from './Img';
+import { Mesh } from './Mesh';
+import { Text } from './Text';
 export class CaseClaude extends Mesh {
 	protected controls!: OrbitControls;
 	protected mouse = mousePos;
@@ -70,7 +70,6 @@ export class CaseClaude extends Mesh {
 			layerGeometry.translate(0, 0, z);
 
 			const layerMaterial = new THREE.ShaderMaterial({
-				glslVersion: THREE.GLSL3,
 				uniforms: {
 					u_time: { value: 0 },
 					u_layer: { value: i },
@@ -79,8 +78,8 @@ export class CaseClaude extends Mesh {
 				vertexShader: `
           uniform float u_time;
           uniform float u_layer;
-          out vec2 vUv;
-          out float vLayer;
+          varying vec2 vUv;
+          varying float vLayer;
           
           void main() {
             vUv = uv;
@@ -99,11 +98,9 @@ export class CaseClaude extends Mesh {
           uniform float u_time;
           uniform float u_layer;
           uniform vec2 u_mouse;
-          in vec2 vUv;
-          in float vLayer;
-
-          out vec4 fragColor;
-
+          varying vec2 vUv;
+          varying float vLayer;
+          
           // 六角形グリッド
           float hexDist(vec2 p) {
             p = abs(p);
@@ -148,8 +145,8 @@ export class CaseClaude extends Mesh {
             
             float alpha = 0.1 + hexPattern * 0.2 + flow * 0.1;
             alpha *= (1.0 - abs(uv.x) * 0.3) * (1.0 - abs(uv.y) * 0.3);
-
-            fragColor = vec4(color, alpha);
+            
+            gl_FragColor = vec4(color, alpha);
           }
         `,
 				transparent: true,
@@ -170,14 +167,13 @@ export class CaseClaude extends Mesh {
 		projectorGeometry.translate(0, 1.2, 0);
 
 		const projectorMaterial = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_active: { value: 1 },
 			},
 			vertexShader: `
         uniform float u_time;
-        out vec3 vPosition;
+        varying vec3 vPosition;
         
         void main() {
           vPosition = position;
@@ -193,9 +189,7 @@ export class CaseClaude extends Mesh {
 			fragmentShader: `
         uniform float u_time;
         uniform float u_active;
-        in vec3 vPosition;
-
-        out vec4 fragColor;
+        varying vec3 vPosition;
         
         void main() {
           // レーザー光のような効果
@@ -209,7 +203,7 @@ export class CaseClaude extends Mesh {
           color *= intensity * u_active;
           color += vec3(scan) * 0.2;
           
-          fragColor = vec4(color, 0.6);
+          gl_FragColor = vec4(color, 0.6);
         }
       `,
 			transparent: true,
@@ -225,7 +219,6 @@ export class CaseClaude extends Mesh {
 		portalGeometry.translate(0, 0, 0.99);
 
 		const portalMaterial = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_mouse: { value: new THREE.Vector2() },
@@ -236,9 +229,9 @@ export class CaseClaude extends Mesh {
 			vertexShader: `
         uniform float u_time;
         uniform vec2 u_mouse;
-        out vec2 vUv;
-        out vec3 vPosition;
-
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        
         void main() {
           vUv = uv;
           vPosition = position;
@@ -263,10 +256,9 @@ export class CaseClaude extends Mesh {
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform vec2 u_resolution;
-        in vec2 vUv;
-        in vec3 vPosition;
-
-        out vec4 fragColor;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        
         // フラクタルノイズ
         float noise(vec2 p) {
           return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
@@ -319,7 +311,7 @@ export class CaseClaude extends Mesh {
           
           float alpha = edge * 0.8 + core * 0.3;
           
-          fragColor = vec4(portalColor, alpha);
+          gl_FragColor = vec4(portalColor, alpha);
         }
       `,
 			transparent: true,
@@ -336,15 +328,14 @@ export class CaseClaude extends Mesh {
 		const coreGeometry = new THREE.OctahedronGeometry(0.3, 2);
 
 		const coreMaterial = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 			},
 			vertexShader: `
         uniform float u_time;
-        out vec3 vPosition;
-        out vec3 vNormal;
-
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        
         void main() {
           vPosition = position;
           vNormal = normal;
@@ -365,10 +356,9 @@ export class CaseClaude extends Mesh {
       `,
 			fragmentShader: `
         uniform float u_time;
-        in vec3 vPosition;
-        in vec3 vNormal;
-
-        out vec4 fragColor;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        
         void main() {
           // プラズマ効果
           vec3 plasma = vec3(
@@ -386,7 +376,7 @@ export class CaseClaude extends Mesh {
           float glow = dot(vNormal, normalize(vPosition));
           color += vec3(1.0, 0.5, 0.0) * glow * 0.5;
           
-          fragColor = vec4(color, 0.8);
+          gl_FragColor = vec4(color, 0.8);
         }
       `,
 			transparent: true,
@@ -429,16 +419,15 @@ export class CaseClaude extends Mesh {
 	protected initMaterial(): void {
 		// メインフレームのマテリアル
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
 			},
 			vertexShader: `
-        out vec2 vUv;
-        out vec3 vPosition;
-        out vec3 vNormal;
-        out vec3 vViewDirection;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
         uniform float u_time;
         
         void main() {
@@ -459,14 +448,13 @@ export class CaseClaude extends Mesh {
         }
       `,
 			fragmentShader: `
-        in vec2 vUv;
-        in vec3 vPosition;
-        in vec3 vNormal;
-        in vec3 vViewDirection;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
         uniform float u_time;
         uniform vec2 u_mouse;
-
-        out vec4 fragColor;
+        
         void main() {
           // メタリックな基本色
           vec3 baseColor = vec3(0.1, 0.1, 0.15);
@@ -492,7 +480,7 @@ export class CaseClaude extends Mesh {
           float glow = sin(vPosition.x * 20.0 + u_time * 2.0) * 0.5 + 0.5;
           color += vec3(0.0, glow * 0.2, glow * 0.3);
           
-          fragColor = vec4(color, 0.95);
+          gl_FragColor = vec4(color, 0.95);
         }
       `,
 			side: THREE.DoubleSide,

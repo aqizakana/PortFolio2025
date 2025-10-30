@@ -1,6 +1,6 @@
+import { Mesh } from '@mesh/Mesh';
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { Mesh } from '../mesh';
 
 export class Building extends Mesh {
 	constructor() {
@@ -33,12 +33,11 @@ export class Building extends Mesh {
 
 	protected initMaterial(): void {
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 			},
 			vertexShader: `
-      out vec3 vPosition;
+      varying vec3 vPosition;
       void main() {
         vec4 worldPosition = modelMatrix * vec4(position, 1.0);
         vPosition = worldPosition.xyz;
@@ -46,10 +45,9 @@ export class Building extends Mesh {
       }
     `,
 			fragmentShader: `
-      in vec3 vPosition;
+      varying vec3 vPosition;
       uniform float u_time;
 
-			out vec4 fragColor;
       void main() {
         // Z方向の閾値（これを調整すると透明になる位置を動かせる）
         float cutoff = sin(u_time * 0.5) * 0.5;
@@ -62,7 +60,7 @@ export class Building extends Mesh {
         // ベースカラー
         vec3 color = mix(vec3(0.2, 0.2, 0.8), vec3(0.8, 0.4, 0.4), vPosition.y + 0.5);
 
-        fragColor = vec4(color, 1.0);
+        gl_FragColor = vec4(color, 1.0);
       }
     `,
 			side: THREE.DoubleSide,
