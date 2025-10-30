@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 
 export class Text extends Mesh {
 	protected controls!: OrbitControls;

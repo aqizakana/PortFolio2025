@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { mousePos } from '../lib/MousePos';
 import { Img } from './Img';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 import { Text } from './Text';
 
 export class PyramidCase extends Mesh {

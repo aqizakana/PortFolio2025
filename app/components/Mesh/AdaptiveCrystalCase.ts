@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry';
 import { mousePos } from '../lib/MousePos';
 import { Img } from './Img';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 import { Text } from './Text';
 
 export class AdaptiveCrystalCase extends Mesh {

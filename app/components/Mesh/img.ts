@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 
 export class Img extends Mesh {
 	protected controls!: OrbitControls;

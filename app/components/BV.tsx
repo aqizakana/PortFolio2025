@@ -5,11 +5,11 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './BV.css';
+import { List } from './lib/CDlist';
 import { Ground } from './Mesh/City/ground';
-import { Display } from './Mesh/Display';
+import { Display } from './Mesh/display';
 import { Noise } from './Mesh/Noise';
 import { Sun } from './Mesh/Sun';
-import { List } from './lib/CDlist';
 
 const BV = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);

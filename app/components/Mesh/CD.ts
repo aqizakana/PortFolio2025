@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { type CDItem } from '../lib/CDlist';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 
 export class CD extends Mesh {
 	protected item: CDItem;

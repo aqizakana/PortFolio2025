@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Img } from './Img';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 import { Text } from './Text';
 import { Window } from './Window';
 export class NormalDisplay extends Mesh {
