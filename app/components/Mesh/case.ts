@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
-import { Mesh } from './mesh';
+import { Mesh } from './Mesh';
 
 export class Case extends Mesh {
 	protected controls!: OrbitControls;
@@ -17,7 +17,7 @@ export class Case extends Mesh {
 		const newFaces = [];
 
 		// BoxGeometry has 12 triangles (6 faces * 2 triangles each)
-		// Front face triangles are at indices 8-13(triangles 4-5)
+		// Front face triangles are at indices 8-13 (triangles 4-5)
 		for (let i = 0; i < faces.length; i += 3) {
 			const triangleIndex = Math.floor(i / 3);
 			if (triangleIndex !== 8 && triangleIndex !== 9) {
@@ -32,16 +32,15 @@ export class Case extends Mesh {
 
 	protected initMaterial(): void {
 		this.material = new THREE.ShaderMaterial({
-			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 				u_mouse: { value: this.mouse },
 			},
 			vertexShader: `
-        out vec2 vUv;
-        out vec3 vPosition;
-        out vec3 vNormal;
-        out vec3 vViewDirection;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
         void main() {
           vUv = uv;
           vec4 worldPosition = modelMatrix * vec4(position, 1.0);
@@ -52,14 +51,12 @@ export class Case extends Mesh {
         }
       `,
 			fragmentShader: `
-        in vec2 vUv;
-        in vec3 vPosition;
-        in vec3 vNormal;
-        in vec3 vViewDirection;
+        varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vViewDirection;
         uniform float u_time;
         uniform vec2 u_mouse;
-
-        out vec4 fragColor;
         void main() {
           // Color based on position and depth
           float depth = gl_FragCoord.z;
@@ -70,31 +67,26 @@ export class Case extends Mesh {
           float fresnelPower = 10.0; // 調整可能なパラメータ
           float fresnelBias = 0.1;  // 最小反射率
           float fresnelScale = 1.0; // スケール
-          float facing = dot(vNormal, vViewDirection);
-          float NdotV = max(0.0, facing);
+          float NdotV = max(0.0, dot(vNormal, vViewDirection));
           float fresnel = fresnelBias + fresnelScale * pow(1.0 - NdotV, fresnelPower);
           color += fresnel * vec3(1.0, 1.0, 1.0) * 0.5;
+
+          // Dynamic grid pattern based on UV and time
+          vec2 grid = fract(vUv * 10.0 + vec2(u_time * 0.1, u_time * 0.1));
+          float gridPattern = smoothstep(0.02, 0.05, min(grid.x, grid.y)) * 
+          smoothstep(0.02, 0.05, min(1.0 - grid.x, 1.0 - grid.y));
+          color *= gridPattern;
 
           float mouseDist = length(vPosition.xy - (u_mouse * vec2(2.0, 2.0)));
           float mouseLight = 0.3 / (mouseDist + 0.1);
           mouseLight = smoothstep(0.0, 1.0, mouseLight);
           mouseLight = mouseLight * mouseLight * (3.0 - 2.0 * mouseLight); // smoothstep easing
           //color += vec3(mouseLight) * 0.5;
-
-          // Dynamic grid pattern based on UV and time
-          vec2 grid;
-          if (abs(facing) < 0.5) {
-          grid = fract(vUv * 10.0 + vec2(u_time * 0.1, u_time * 0.1));}
-          else {
-          grid = abs(fract(vUv * 10.0 - vec2(u_time * 0.1, u_time * 0.1)));
-          }
-          float gridPattern = smoothstep(0.02, 0.05, grid.x) *
-          smoothstep(0.02, 0.05, 1.0 - grid.x);
-          color *= gridPattern;
           
           // Add some subtle animation
-          // color += cos(vPosition.y * 5.0 + u_time) * 0.1;
-          fragColor = vec4(color, 1.0);
+          color += sin(vPosition.x * 5.0 + u_time) * 0.1;
+          color += cos(vPosition.y * 5.0 + u_time) * 0.1;
+          gl_FragColor = vec4(color, 1.0);
         }
       `,
 			side: THREE.DoubleSide,

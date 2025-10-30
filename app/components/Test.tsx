@@ -3,14 +3,15 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { List } from './lib/CDlist';
-import { AdaptiveCrystalCase } from './Mesh/adaptiveCrystalCase';
-import { CaseClaude } from './Mesh/caseWithClaude';
-import { Display } from './Mesh/display';
+import { AdaptiveCrystalCase } from './Mesh/AdaptiveCrystalCase';
+import { ZaraCase } from './Mesh/caseLikeZara';
+import { CaseClaude } from './Mesh/CaseWithClaude';
+import { Display } from './Mesh/Display';
 import { Display2 } from './Mesh/display2';
 import { newCase } from './Mesh/newCase';
 import { newCase2 } from './Mesh/newCase2';
 import { NormalDisplay } from './Mesh/normal';
-import { PyramidCase } from './Mesh/pyramidWireCase';
+import { PyramidCase } from './Mesh/PyramidWireCase';
 import './Test.css';
 
 const DisplayTest = () => {
@@ -27,6 +28,7 @@ const DisplayTest = () => {
 			| newCase2
 			| PyramidCase
 			| CaseClaude
+			| ZaraCase
 			| AdaptiveCrystalCase
 			| NormalDisplay
 		)[]
@@ -77,6 +79,7 @@ const DisplayTest = () => {
 			| newCase2
 			| PyramidCase
 			| CaseClaude
+			| ZaraCase
 			| AdaptiveCrystalCase
 			| NormalDisplay
 		)[] = [];
@@ -90,17 +93,19 @@ const DisplayTest = () => {
 				newCase2,
 				PyramidCase,
 				CaseClaude,
+				ZaraCase,
 				AdaptiveCrystalCase,
 			];
 			const variations: (
-				| NormalDisplay
 				| Display
 				| Display2
 				| newCase
 				| newCase2
 				| PyramidCase
 				| CaseClaude
+				| ZaraCase
 				| AdaptiveCrystalCase
+				| NormalDisplay
 			)[] = [];
 
 			// displayClassesのすべての要素を使用するようにループ

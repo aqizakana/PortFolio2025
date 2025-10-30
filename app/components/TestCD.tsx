@@ -3,8 +3,8 @@ import { gsap } from 'gsap';
 import { useEffect, useRef, type MouseEvent } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Shelf } from './Mesh/Shelf';
 import { Case } from './Mesh/case';
-import { Shelf } from './Mesh/shelf';
 import './Test.css';
 import { List } from './lib/CDlist';
 const CDTest = () => {
