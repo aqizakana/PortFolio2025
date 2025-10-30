@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry';
 import { mousePos } from '../lib/MousePos';
-import { Img } from './Img';
-import { Mesh } from './Mesh';
-import { Text } from './Text';
+import { Img } from './img';
+import { Mesh } from './mesh';
+import { Text } from './text';
 
 export class AdaptiveCrystalCase extends Mesh {
 	protected mouse = mousePos;
@@ -133,6 +133,7 @@ export class AdaptiveCrystalCase extends Mesh {
 		for (let i = 0; i < 3; i++) {
 			const scale = 0.3 + i * 0.3;
 			const innerMaterial = new THREE.ShaderMaterial({
+				glslVersion: THREE.GLSL3,
 				uniforms: {
 					u_time: { value: 0 },
 					u_scale: { value: scale },
@@ -141,8 +142,8 @@ export class AdaptiveCrystalCase extends Mesh {
 				vertexShader: `
           uniform float u_time;
           uniform float u_scale;
-          varying vec3 vPosition;
-          varying vec3 vNormal;
+          out vec3 vPosition;
+          out vec3 vNormal;
           
           void main() {
             vPosition = position;
@@ -166,9 +167,11 @@ export class AdaptiveCrystalCase extends Mesh {
           uniform float u_time;
           uniform float u_scale;
           uniform float u_index;
-          varying vec3 vPosition;
-          varying vec3 vNormal;
-          
+          in vec3 vPosition;
+          in vec3 vNormal;
+
+					out vec4 fragColor;
+
           void main() {
             vec3 color = vec3(0.0);
             
@@ -185,7 +188,7 @@ export class AdaptiveCrystalCase extends Mesh {
             float pulse = sin(u_time * 3.0 - length(vPosition) * 5.0) * 0.5 + 0.5;
             color *= 0.5 + pulse * 0.5;
             
-            gl_FragColor = vec4(color, 0.6);
+            fragColor = vec4(color, 0.6);
           }
         `,
 				transparent: true,
@@ -238,6 +241,7 @@ export class AdaptiveCrystalCase extends Mesh {
 		);
 
 		const particleMaterial = new THREE.ShaderMaterial({
+			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
@@ -246,9 +250,9 @@ export class AdaptiveCrystalCase extends Mesh {
         attribute vec3 velocity;
         attribute float lifetime;
         uniform float u_time;
-        varying float vLifetime;
-        varying float vDistance;
-        
+        out float vLifetime;
+        out float vDistance;
+
         void main() {
           vLifetime = lifetime;
           
@@ -273,9 +277,10 @@ export class AdaptiveCrystalCase extends Mesh {
       `,
 			fragmentShader: `
         uniform float u_time;
-        varying float vLifetime;
-        varying float vDistance;
-        
+        in float vLifetime;
+        in float vDistance;
+
+				out vec4 fragColor;
         void main() {
           // 円形のパーティクル
           vec2 center = gl_PointCoord - 0.5;
@@ -292,7 +297,7 @@ export class AdaptiveCrystalCase extends Mesh {
           float alpha = 1.0 - life;
           alpha *= 1.0 - length(center) * 2.0;
           
-          gl_FragColor = vec4(color, alpha * 0.6);
+          fragColor = vec4(color, alpha * 0.6);
         }
       `,
 			transparent: true,
@@ -306,14 +311,15 @@ export class AdaptiveCrystalCase extends Mesh {
 	private createEnergyField(): void {
 		const fieldGeometry = new THREE.SphereGeometry(3, 32, 32);
 		const fieldMaterial = new THREE.ShaderMaterial({
+			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
 				u_intensity: { value: 0 },
 			},
 			vertexShader: `
-        varying vec3 vPosition;
-        varying vec3 vNormal;
+        out vec3 vPosition;
+        out vec3 vNormal;
         uniform float u_time;
         uniform float u_intensity;
         
@@ -333,12 +339,14 @@ export class AdaptiveCrystalCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        varying vec3 vPosition;
-        varying vec3 vNormal;
+        in vec3 vPosition;
+        in vec3 vNormal;
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform float u_intensity;
-        
+
+				out vec4 fragColor;
+
         void main() {
           // フィールドの可視化
           float fresnel = pow(1.0 - abs(dot(vNormal, normalize(vPosition))), 3.0);
@@ -354,7 +362,7 @@ export class AdaptiveCrystalCase extends Mesh {
           
           float alpha = fresnel * 0.3 * u_intensity;
           
-          gl_FragColor = vec4(color, alpha);
+          fragColor = vec4(color, alpha);
         }
       `,
 			transparent: true,
@@ -410,6 +418,7 @@ export class AdaptiveCrystalCase extends Mesh {
 
 	protected initMaterial(): void {
 		this.material = new THREE.ShaderMaterial({
+			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
@@ -424,13 +433,13 @@ export class AdaptiveCrystalCase extends Mesh {
         uniform float u_audioReactivity;
         
         attribute vec3 targetPosition;
-        
-        varying vec3 vPosition;
-        varying vec3 vNormal;
-        varying vec3 vViewDirection;
-        varying vec2 vUv;
-        varying float vDistortion;
-        
+
+        out vec3 vPosition;
+        out vec3 vNormal;
+        out vec3 vViewDirection;
+        out vec2 vUv;
+        out float vDistortion;
+
         // ノイズ関数
         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
         vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -522,16 +531,17 @@ export class AdaptiveCrystalCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        varying vec3 vPosition;
-        varying vec3 vNormal;
-        varying vec3 vViewDirection;
-        varying vec2 vUv;
-        varying float vDistortion;
-        
+        in vec3 vPosition;
+        in vec3 vNormal;
+        in vec3 vViewDirection;
+        in vec2 vUv;
+        in float vDistortion;
+
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform float u_audioReactivity;
-        
+			
+				out vec4 fragColor;
         // 複雑なパターン生成
         float hexagon(vec2 p, float r) {
           const vec3 k = vec3(-0.866025404, 0.5, 0.577350269);
@@ -614,7 +624,7 @@ export class AdaptiveCrystalCase extends Mesh {
           alpha += hex * 0.1;
           alpha = clamp(alpha, 0.0, 0.9);
           
-          gl_FragColor = vec4(color, alpha);
+          fragColor = vec4(color, alpha);
         }
       `,
 			transparent: true,
@@ -708,9 +718,6 @@ export class AdaptiveCrystalCase extends Mesh {
 			}
 			line.rotation.z += 0.001 * (index + 1);
 		});
-
-		// 全体の回転（ゆっくりと）
-		this.mesh.rotation.y += 0.002;
 
 		// カメラ距離に応じた詳細度の調整
 		if (cameraPos) {

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
-import { Mesh } from './Mesh';
+import { Mesh } from './mesh';
 
 export class ZaraCase extends Mesh {
 	protected controls!: OrbitControls;
@@ -75,6 +75,7 @@ export class ZaraCase extends Mesh {
 		particleGeometry.setAttribute('phase', new THREE.BufferAttribute(phases, 1));
 
 		const particleMaterial = new THREE.ShaderMaterial({
+			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_superposition: { value: 0.5 },
@@ -89,10 +90,10 @@ export class ZaraCase extends Mesh {
         uniform float u_collapsed;
         uniform float u_coherence;
         
-        varying float vState;
-        varying float vPhase;
-        varying vec3 vColor;
-        
+        out float vState;
+        out float vPhase;
+        out vec3 vColor;
+
         void main() {
           vState = quantumState;
           vPhase = phase + u_time;
@@ -144,11 +145,12 @@ export class ZaraCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        varying float vState;
-        varying float vPhase;
-        varying vec3 vColor;
+        in float vState;
+        in float vPhase;
+        in vec3 vColor;
         uniform float u_coherence;
         
+				out vec4 fragColor;
         void main() {
           // 円形パーティクル
           vec2 center = gl_PointCoord - 0.5;
@@ -159,9 +161,9 @@ export class ZaraCase extends Mesh {
           float interference = sin(vPhase * 10.0) * 0.5 + 0.5;
           
           vec3 color = vColor * interference;
-          float alpha = (1.0 - dist * 2.0) * u_coherence;
+          float alpha = (1.0 - dist * 2.0) * 0.5;
           
-          gl_FragColor = vec4(color, alpha);
+          fragColor = vec4(color, alpha);
         }
       `,
 			transparent: true,
@@ -176,6 +178,7 @@ export class ZaraCase extends Mesh {
 		// 波動関数の3D可視化
 		const waveGeometry = new THREE.BoxGeometry(4.5, 2.5, 2.5, 32, 16, 16);
 		const waveMaterial = new THREE.ShaderMaterial({
+			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0 },
 				u_superposition: { value: 0.5 },
@@ -185,10 +188,10 @@ export class ZaraCase extends Mesh {
 			vertexShader: `
         uniform float u_time;
         uniform float u_superposition;
-        varying vec3 vPosition;
-        varying vec3 vNormal;
-        varying float vWave;
-        
+        out vec3 vPosition;
+        out vec3 vNormal;
+        out float vWave;
+
         // 3D波動関数
         float waveFunction(vec3 p, float t) {
           float psi1 = sin(p.x * 3.0 + t) * cos(p.y * 3.0 - t) * sin(p.z * 3.0);
@@ -210,13 +213,14 @@ export class ZaraCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        varying vec3 vPosition;
-        varying vec3 vNormal;
-        varying float vWave;
+        in vec3 vPosition;
+        in vec3 vNormal;
+        in float vWave;
         uniform float u_time;
         uniform float u_entanglement;
         uniform vec2 u_mouse;
-        
+
+				out vec4 fragColor;
         void main() {
           // 波動関数の確率密度
           float probability = abs(vWave);
@@ -232,7 +236,7 @@ export class ZaraCase extends Mesh {
           color += entangledColor * 0.3;
           
           float alpha = 0.1 + probability * 0.2;
-          gl_FragColor = vec4(color, alpha);
+          fragColor = vec4(color, alpha);
         }
       `,
 			transparent: true,
@@ -245,6 +249,7 @@ export class ZaraCase extends Mesh {
 
 	protected initMaterial(): void {
 		this.material = new THREE.ShaderMaterial({
+			glslVersion: THREE.GLSL3,
 			uniforms: {
 				u_time: { value: 0.0 },
 				u_mouse: { value: new THREE.Vector2(0, 0) },
@@ -256,10 +261,10 @@ export class ZaraCase extends Mesh {
 				u_phase: { value: 0.0 },
 			},
 			vertexShader: `
-        varying vec2 vUv;
-        varying vec3 vPosition;
-        varying vec3 vNormal;
-        varying vec3 vViewDirection;
+        out vec2 vUv;
+        out vec3 vPosition;
+        out vec3 vNormal;
+        out vec3 vViewDirection;
         uniform float u_time;
         uniform float u_superposition;
         uniform float u_phase;
@@ -272,7 +277,7 @@ export class ZaraCase extends Mesh {
           float quantumOscillation = sin(u_phase + position.x * 5.0) * 
                                     cos(u_phase + position.y * 5.0) * 
                                     sin(u_phase + position.z * 5.0);
-          quantumPos += normal * quantumOscillation * 0.02 * u_superposition;
+          //quantumPos += normal * quantumOscillation * 0.02 * u_superposition;
           
           vec4 worldPosition = modelMatrix * vec4(quantumPos, 1.0);
           vPosition = worldPosition.xyz;
@@ -282,10 +287,10 @@ export class ZaraCase extends Mesh {
         }
       `,
 			fragmentShader: `
-        varying vec2 vUv;
-        varying vec3 vPosition;
-        varying vec3 vNormal;
-        varying vec3 vViewDirection;
+        in vec2 vUv;
+        in vec3 vPosition;
+        in vec3 vNormal;
+        in vec3 vViewDirection;
         uniform float u_time;
         uniform vec2 u_mouse;
         uniform float u_superposition;
@@ -294,6 +299,8 @@ export class ZaraCase extends Mesh {
         uniform float u_tunneling;
         uniform float u_coherence;
         uniform float u_phase;
+
+				out vec4 fragColor;
         
         // 量子的な干渉パターン
         float quantumInterference(vec3 p) {
@@ -362,12 +369,12 @@ export class ZaraCase extends Mesh {
           color = mix(color, vec3(noise), decoherence * 0.2);
           
           // 観測による変化
-          if (u_collapsed > 0.5) {
+          if (u_collapsed > 0.8) {
             color = mix(color, vec3(1.0), 0.3);
           }
           
           float alpha = 0.8 + fresnel * 0.2;
-          gl_FragColor = vec4(color, alpha);
+          fragColor = vec4(color, alpha);
         }
       `,
 			side: THREE.DoubleSide,
