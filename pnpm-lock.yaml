@@ -21,8 +21,8 @@ importers:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       three:
-        specifier: ^0.178.0
-        version: 0.178.0
+        specifier: ^0.183.2
+        version: 0.183.2
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.8.1
@@ -3352,8 +3352,8 @@ packages:
     resolution: {integrity: sha512-te/NtwBwfiNRLf9Ijqx3T0nlqZiQ2XrrtBvu+cLL8ZRrGkO0NHTug8MYFKyoSrv/sHTaSKfilUkizV6XhxMJ3g==}
     engines: {node: '>=8'}
 
-  three@0.178.0:
-    resolution: {integrity: sha512-ybFIB0+x8mz0wnZgSGy2MO/WCO6xZhQSZnmfytSPyNpM0sBafGRVhdaj+erYh5U+RhQOAg/eXqw5uVDiM2BjhQ==}
+  three@0.183.2:
+    resolution: {integrity: sha512-di3BsL2FEQ1PA7Hcvn4fyJOlxRRgFYBpMTcyOgkwJIaDOdJMebEFPA+t98EvjuljDx4hNulAGwF6KIjtwI5jgQ==}
 
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
@@ -7130,7 +7130,7 @@ snapshots:
 
   text-extensions@2.4.0: {}
 
-  three@0.178.0: {}
+  three@0.183.2: {}
 
   through@2.3.8: {}
 

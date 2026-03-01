@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { mousePos } from '../lib/MousePos';
-import { Mesh } from './mesh';
+import { mousePos } from '../../lib/MousePos';
+import { Mesh } from '../base/mesh';
 
 export class ZaraCase extends Mesh {
 	protected controls!: OrbitControls;

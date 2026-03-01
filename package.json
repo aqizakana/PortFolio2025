@@ -41,7 +41,7 @@
 		"next": "^15.3.5",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
-		"three": "^0.178.0"
+		"three": "^0.183.2"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",

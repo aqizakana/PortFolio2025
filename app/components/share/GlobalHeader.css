@@ -2,25 +2,44 @@
 	width: 50px;
 	height: 100%;
 	position: fixed;
-	justify-content: flex-start;
-	align-items: center;
-	gap: 50px;
 	top: 0;
-	background-color: rgb(12 122 231 / 20%);
+	left: 0;
 	z-index: 1000;
-	padding: 16px;
-	writing-mode: vertical-rl;
-	display: none;
+	overflow: hidden;
 }
 
-.name {
-	font-weight: 600;
-	font-size: 1rem;
-	color: #fff;
+.header-container {
+	display: inline-flex;
+	gap: 50px;
+	position: relative;
+	writing-mode: vertical-rl;
+}
+
+.nav {
+	display: flex;
+	gap: 30px;
+	padding: 20px;
 }
 
 .link {
 	text-decoration: none;
-	font-size: 1rem;
-	color: #fff;
+	color: #333;
+	transition: all 0.3s ease-in-out;
+	cursor: pointer;
+	position: relative;
+	font-weight: 600;
+}
+
+.link:hover {
+	color: red;
+	transform: translateY(-2px);
+}
+
+.link:focus {
+	outline: 2px solid #fff;
+	outline-offset: 4px;
+}
+
+.link:active {
+	transform: translateY(0);
 }

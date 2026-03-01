@@ -3,15 +3,15 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { List } from './lib/CDlist';
-import { AdaptiveCrystalCase } from './mesh/adaptiveCrystalCase';
-import { ZaraCase } from './mesh/caseLikeZara';
-import { CaseClaude } from './mesh/caseWithClaude';
-import { Display } from './mesh/display';
-import { Display2 } from './mesh/display2';
-import { newCase } from './mesh/newCase';
-import { newCase2 } from './mesh/newCase2';
-import { NormalDisplay } from './mesh/normal';
-import { PyramidCase } from './mesh/pyramidWireCase';
+import { AdaptiveCrystalCase } from './Mesh/displays/adaptiveCrystalCase';
+import { ZaraCase } from './Mesh/displays/caseLikeZara';
+import { CaseClaude } from './Mesh/displays/caseWithClaude';
+import { Display } from './Mesh/displays/display';
+import { Display2 } from './Mesh/displays/display2';
+import { newCase } from './Mesh/displays/newCase';
+import { newCase2 } from './Mesh/displays/newCase2';
+import { NormalDisplay } from './Mesh/base/normal';
+import { PyramidCase } from './Mesh/displays/pyramidWireCase';
 import './Test.css';
 
 const DisplayTest = () => {
