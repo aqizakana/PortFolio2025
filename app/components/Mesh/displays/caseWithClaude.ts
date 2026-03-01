@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
 import { Img } from './img';
-import { Mesh } from './mesh';
+import { Mesh } from '../base/mesh';
 import { Text } from './text';
 export class CaseClaude extends Mesh {
 	protected controls!: OrbitControls;

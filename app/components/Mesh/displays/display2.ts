@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { ZaraCase } from './caseLikeZara';
-import { Img } from './img';
-import { Table } from './table';
-import { Text } from './text';
-import { Window } from './window';
+import { Img } from '../ui/img';
+import { Table } from '../environments/table';
+import { Text } from '../ui/text';
+import { Window } from '../environments/window';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils';

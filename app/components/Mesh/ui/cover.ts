@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mousePos } from '../lib/MousePos';
-import { Mesh } from './mesh';
+import { Mesh } from '../base/mesh';
 export class Cover extends Mesh {
 	protected mouse = mousePos;
 	constructor() {

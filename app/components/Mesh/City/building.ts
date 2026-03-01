@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { Mesh } from '../mesh';
+import { Mesh } from '../base/mesh';
 
 export class Building extends Mesh {
 	constructor() {

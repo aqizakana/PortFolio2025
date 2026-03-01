@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { mousePos } from '../lib/MousePos';
-import { Mesh } from './mesh';
+import { Mesh } from '../base/mesh';
 
 export class Table extends Mesh {
 	protected controls!: OrbitControls;

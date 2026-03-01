@@ -1,15 +1,15 @@
 'use client';
 
-import { Building } from '@mesh/City/building';
+import { Building } from './Mesh/City/building';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import './BV.css';
 import { List } from './lib/CDlist';
 import { Ground } from './Mesh/City/ground';
-import { Display } from './Mesh/display';
-import { Noise } from './Mesh/noise';
-import { Sun } from './Mesh/sun';
+import { Display } from './Mesh/displays/display';
+import { Noise } from './Mesh/effects/noise';
+import { Sun } from './Mesh/environments/sun';
 
 const BV = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
